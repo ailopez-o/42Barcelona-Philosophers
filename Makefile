@@ -17,7 +17,8 @@ NAME		:= philo
 SRC_DIR		:= src/
 OBJ_DIR		:= obj/
 CC			:= gcc
-CFLAGS		:= -g -O3 -Wall -Werror -Wextra
+#CFLAGS		:= -g -Wall -Werror -Wextra
+CFLAGS		:= -g -Werror
 #FSANITIZE	:= -fsanitize=address -g3
 FSANITIZE	:= 
 NOFLAGS		:= -g
@@ -43,7 +44,7 @@ WHITE = \033[0;97m
 
 #Sources
 
-SRC_FILES	=	main
+SRC_FILES	=	main utils
 
 SRC 		= 	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ 		= 	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
@@ -91,7 +92,7 @@ fclean:		clean
 
 re:			fclean 
 			@$(MAKE)	
-			@echo "$(GREEN)Cleaned and rebuilt everything for Fdf!$(DEF_COLOR)"
+			@echo "$(GREEN)Cleaned and rebuilt everything for Philosophers!$(DEF_COLOR)"
 
 norm:
 			@norminette $(SRC) $(INCLUDE) | grep -v Norme -B1 || true
