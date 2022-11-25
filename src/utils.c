@@ -1,19 +1,27 @@
 #include "../inc/defines.h"
 #include <sys/time.h>
 
-long long	timestamp(void)
+unsigned long	timestamp(void)
 {
-	struct timeval	t;
+	struct timeval	time;
+	unsigned long	l;
+	unsigned long	s;
+	unsigned long	u;
 
-	gettimeofday(&t, NULL);
-	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
+	gettimeofday(&time, NULL);
+	s = (time.tv_sec * 1000);
+	u = (time.tv_usec / 1000);
+	l = s + u;
+	return (l);
 }
 
-long long	time_diff(long long past, long long pres)
+unsigned long	real_time(t_philo *philo)
 {
-	return (pres - past);
+	return (timestamp() - philo->start_time);
 }
 
+
+/*
 void	philo_sleep(long long time)
 {
 	long long i;
@@ -26,3 +34,4 @@ void	philo_sleep(long long time)
 		usleep(50);
 	}
 }
+*/

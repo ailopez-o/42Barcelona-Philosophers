@@ -24,6 +24,7 @@ typedef struct s_fork{
 
 typedef struct s_philo {
 	int					num_philo;
+	unsigned long		start_time;
 	t_data				*data;
 	t_fork				*left_fork;
 	t_fork				*right_fork;
@@ -33,9 +34,9 @@ typedef struct s_philo {
 }	t_philo;
 
 typedef struct s_table {
+	unsigned long	start_time;
 	t_data			data;
 	pthread_mutex_t	print_mtx;
-	long long		first_timestamp;
 	int				num_philos;
 	t_fork			*forks;
 	t_philo			*philos;

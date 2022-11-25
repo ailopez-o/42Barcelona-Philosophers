@@ -32,8 +32,8 @@ void ft_error(int error, t_table *table)
 void	status_print(int	philo_id, pthread_mutex_t *print_mutex, char *str, long long first_timestamp)
 {
 	pthread_mutex_lock(print_mutex);
-	printf("%lli ", timestamp() - first_timestamp);
-	printf("%i ", philo_id + 1);
+	printf("Time => [%lli] ", timestamp() - first_timestamp);
+	printf("Philo [%i]:", philo_id + 1);
 	printf("%s\n", str);
 	pthread_mutex_unlock(print_mutex);
 }
@@ -44,11 +44,22 @@ void * philo_thread(void *philosopher)
 
 	philo = (t_philo *)philosopher;
 	pthread_mutex_lock(philo->mutex_print);
-	ft_printf("PhiloNum [%d] created - Left Fork Id [%d] - Right Fork id [%d]\n", philo->num_philo, philo->left_fork->num, philo->right_fork->num);
+	//ft_printf("PhiloNum [%d] created - Left Fork Id [%d] - Right Fork id [%d]\n", philo->num_philo + 1, philo->left_fork->num, philo->right_fork->num);
 	pthread_mutex_unlock(philo->mutex_print);	
 	sleep(1);
+	// Cogemos el tenedor
+	pthread_mutex_lock(&philo->left_fork->mutex);
+	status_print(philo->num_philo, philo->mutex_print, "has taken left fork", timestamp());	
+	pthread_mutex_lock(&philo->right_fork->mutex);
+	status_print(philo->num_philo, philo->mutex_print, "has taken right fork", timestamp());	
+	usleep(300);
+	status_print(philo->num_philo, philo->mutex_print, "is eating", timestamp());	
+	pthread_mutex_unlock(&philo->left_fork->mutex);
+	status_print(philo->num_philo, philo->mutex_print, "has release left fork", timestamp());		
+	pthread_mutex_unlock(&philo->right_fork->mutex);
+	status_print(philo->num_philo, philo->mutex_print, "has release right fork", timestamp());	
 	pthread_mutex_lock(philo->mutex_print);	
-	ft_printf("PhiloNum [%d] finished\n", philo->num_philo);
+	ft_printf("PhiloNum [%d] finished\n", philo->num_philo + 1);
 	pthread_mutex_unlock(philo->mutex_print);		
     return NULL;
 }
@@ -74,12 +85,14 @@ void	init_threads_and_mutex(t_table *table)
 			ft_error (ENOMEM, table);
 		i++;
 	}
+	/*
 	i = 0;	
 	while (i < table->num_philos)
 	{
 		ft_printf("Fork Id [%d]\n", table->forks[i].num);
 		i++;
-	}	
+	}
+	*/	
 	// Creamos todos los hilos "pilosophers"
 	i = 0;
 	while (i < table->num_philos)
@@ -91,6 +104,7 @@ void	init_threads_and_mutex(t_table *table)
 		else
 			table->philos[i].right_fork = &table->forks[i - 1];
 		table->philos[i].mutex_print = &table->print_mtx;
+		table->philos[i].start_time = table->start_time;
 		if (pthread_create(&table->philos[i].thread_id, NULL, &philo_thread, &table->philos[i]))
 			ft_error (ENOMEM, table);
 		table->philos[i].last_meal = timestamp();
@@ -122,8 +136,7 @@ int main (int argv, char **argc)
 	int		i;
 
 	// Inicializamos el clock
-	table.first_timestamp = timestamp();
-	printf ("TimeStamp Init [%lld]\n", table.first_timestamp);
+	table.start_time = timestamp();
 	// Parseamos
 	parsing_args(argv, argc, &table);
 	// Inicializamos thrrads and mutex
