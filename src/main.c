@@ -29,12 +29,15 @@ void ft_error(int error, t_table *table)
 	free(table->forks);
 }
 
-void	status_print(int	philo_id, pthread_mutex_t *print_mutex, char *str, long long first_timestamp)
+void	status_print(int	philo_id, pthread_mutex_t *print_mutex, char *str, unsigned long first_timestamp, char *color)
 {
+	unsigned long	time;
+
+	time = timestamp() - first_timestamp;
 	pthread_mutex_lock(print_mutex);
-	printf("Time => [%lli] ", timestamp() - first_timestamp);
-	printf("Philo [%i]:", philo_id + 1);
-	printf("%s\n", str);
+	printf("%s%lu ms ▶ %s", KBLU, time, DEF_COLOR);
+	printf("Philo [%03d] ", philo_id + 1);
+	printf("%s%s%s\n", color, str, DEF_COLOR);
 	pthread_mutex_unlock(print_mutex);
 }
 
@@ -49,17 +52,17 @@ void * philo_thread(void *philosopher)
 	sleep(1);
 	// Cogemos el tenedor
 	pthread_mutex_lock(&philo->left_fork->mutex);
-	status_print(philo->num_philo, philo->mutex_print, "has taken left fork", timestamp());	
+	status_print(philo->num_philo, philo->mutex_print, "has taken left fork", timestamp(), KMAG);
 	pthread_mutex_lock(&philo->right_fork->mutex);
-	status_print(philo->num_philo, philo->mutex_print, "has taken right fork", timestamp());	
+	status_print(philo->num_philo, philo->mutex_print, "has taken right fork", timestamp(), KMAG);
 	usleep(300);
-	status_print(philo->num_philo, philo->mutex_print, "is eating", timestamp());	
+	status_print(philo->num_philo, philo->mutex_print, "is eating", timestamp(), KGRN);
 	pthread_mutex_unlock(&philo->left_fork->mutex);
-	status_print(philo->num_philo, philo->mutex_print, "has release left fork", timestamp());		
+	status_print(philo->num_philo, philo->mutex_print, "has release left fork", timestamp(), KYEL);
 	pthread_mutex_unlock(&philo->right_fork->mutex);
-	status_print(philo->num_philo, philo->mutex_print, "has release right fork", timestamp());	
+	status_print(philo->num_philo, philo->mutex_print, "has release right fork", timestamp(), KYEL);
 	pthread_mutex_lock(philo->mutex_print);	
-	ft_printf("PhiloNum [%d] finished\n", philo->num_philo + 1);
+	//ft_printf("PhiloNum [%d] finished\n", philo->num_philo + 1);
 	pthread_mutex_unlock(philo->mutex_print);		
     return NULL;
 }
@@ -85,15 +88,6 @@ void	init_threads_and_mutex(t_table *table)
 			ft_error (ENOMEM, table);
 		i++;
 	}
-	/*
-	i = 0;	
-	while (i < table->num_philos)
-	{
-		ft_printf("Fork Id [%d]\n", table->forks[i].num);
-		i++;
-	}
-	*/	
-	// Creamos todos los hilos "pilosophers"
 	i = 0;
 	while (i < table->num_philos)
 	{
@@ -130,10 +124,22 @@ void	parsing_args(int argv, char **argc, t_table *table)
 		ft_printf("NumTimeEats [%d]\n", table->data.number_time_eats);
 }
 
+void	threads_join(t_table *table)
+{
+	int		i;
+	
+	i = 0; 
+	while (i < table->num_philos)
+	{
+		pthread_join(table->philos[i].thread_id, NULL);
+		i++;
+	}
+}
+
 int main (int argv, char **argc)
 {
 	t_table	table;
-	int		i;
+	unsigned long	time;
 
 	// Inicializamos el clock
 	table.start_time = timestamp();
@@ -142,12 +148,20 @@ int main (int argv, char **argc)
 	// Inicializamos thrrads and mutex
 	init_threads_and_mutex(&table);
 	// Esperamos a que terminen todos los hilos
-	i = 0; 
-	while (i < table.num_philos)
+	threads_join (&table);
+
+/*
+	while (1)
 	{
-		pthread_join(table.philos[i].thread_id, NULL);
-		i++;
+		time = timestamp();
+		usleep(1000);
+		time =  time - table.start_time;
+		printf("Clock [%lu ms]\n", time);
+
 	}
+*/
+
+
 	// Liberamos los mallocs
 	free(table.philos);
 	free(table.forks);		
