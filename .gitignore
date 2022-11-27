@@ -45,6 +45,7 @@ philo
 .vscode/
 references/
 .DS_Store
+.txt
 
 # Kernel Module Compile Results
 *.mod*

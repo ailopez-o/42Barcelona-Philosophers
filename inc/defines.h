@@ -30,35 +30,31 @@
 
 
 typedef struct s_data{
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	number_time_eats;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				number_time_eats;
+	long long		start_time;	
+	pthread_mutex_t	print_mtx;
+	char			dead;
 }	t_data;
-
-typedef struct s_fork{
-	int				num;
-	pthread_mutex_t mutex;
-}	t_fork;
 
 typedef struct s_philo {
 	int					num_philo;
-	unsigned long		start_time;
+	pthread_t			thread_id;	
+	pthread_mutex_t		mutex_meal;
+	pthread_mutex_t		*mutex_fork_left;
+	pthread_mutex_t		*mutex_fork_right;
+	long long			last_meal;	
 	t_data				*data;
-	t_fork				*left_fork;
-	t_fork				*right_fork;
-	pthread_mutex_t		*mutex_print;
-	pthread_t			thread_id;
-	long long			last_meal;
 }	t_philo;
 
 typedef struct s_table {
-	unsigned long	start_time;
-	t_data			data;
-	pthread_mutex_t	print_mtx;
 	int				num_philos;
-	t_fork			*forks;
+	t_data			data;
+	pthread_mutex_t	*forks;	
 	t_philo			*philos;
+	pthread_t		monitor;
 }	t_table;
 
 

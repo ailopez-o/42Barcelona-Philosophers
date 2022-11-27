@@ -19,8 +19,8 @@ OBJ_DIR		:= obj/
 CC			:= gcc
 #CFLAGS		:= -g -Wall -Werror -Wextra
 CFLAGS		:= -g -Werror
-#FSANITIZE	:= -fsanitize=address -g3
-FSANITIZE	:= 
+FSANITIZE	:= -fsanitize=thread
+#FSANITIZE	:= 
 NOFLAGS		:= -g
 RM			:= rm -f
 
@@ -29,6 +29,7 @@ LIB				:= lib/
 PRINTF_DIR		:= $(LIB)ft_printf/
 PRINTF			:= $(PRINTF_DIR)libftprintf.a
 HEADER 			:= -I$(INC) -I$(PRINTF_DIR)
+PTHREAD			= -pthread
 
 # Colors
 
@@ -62,12 +63,12 @@ makelibs:
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(INCS) | $(OBJF)
 			@echo "🍩 $(YELLOW)Compiling: $< $(DEF_COLOR)"
-			$(CC) $(CFLAGS) -MMD -c $< -o $@	
+			$(CC) $(CFLAGS) $(PTHREAD) -MMD -c $< -o $@	
 
 -include 	${DEPS}
 $(NAME):	$(OBJ) Makefile
-			@$(CC) $(CFLAGS) $(FSANITIZE) $(OBJ) $(PRINTF) -o $(NAME)		
-			@echo "👉 $(BLUE)$(CC) $(CFLAGS) $(FSANITIZE) $(OBJ) $(PRINTF) -o $(NAME)$(DEF_COLOR)"
+			@$(CC) $(CFLAGS) $(PTHREAD) $(FSANITIZE) $(OBJ) $(PRINTF) -o $(NAME)		
+			@echo "👉 $(BLUE)$(CC) $(CFLAGS) $(PTHREAD) $(FSANITIZE) $(OBJ) $(PRINTF) -o $(NAME)$(DEF_COLOR)"
 			@echo "$(GREEN)✨ Philosophers compiled!$(DEF_COLOR)"
 
 bonus:		

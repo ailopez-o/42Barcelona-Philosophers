@@ -1,7 +1,7 @@
 #include "../inc/defines.h"
 #include <sys/time.h>
 
-unsigned long	timestamp(void)
+long long	timestamp(void)
 {
 	struct timeval	time;
 	unsigned long	l;
@@ -12,26 +12,27 @@ unsigned long	timestamp(void)
 	s = (time.tv_sec * 1000);
 	u = (time.tv_usec / 1000);
 	l = s + u;
+	//printf("TimeStamp [%lu] seg - [%d]useg\n", s, time.tv_usec);
 	return (l);
 }
 
-unsigned long	real_time(t_philo *philo)
+unsigned int real_time(long long time)
 {
-	return (timestamp() - philo->start_time);
+	long long	now;
+
+	now = timestamp();
+	return ((unsigned int)(now - time));
 }
 
-
-/*
 void	philo_sleep(long long time)
 {
-	long long i;
+	long long init_time;
 
-	i = timestamp();
+	init_time = timestamp();
 	while(1)
 	{
-		if (time_diff(i, timestamp()) >= time)
+		if ((timestamp() - init_time) >= time)
 			break ;
 		usleep(50);
 	}
 }
-*/
