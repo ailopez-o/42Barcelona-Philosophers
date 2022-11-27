@@ -45,6 +45,9 @@ void ft_error(int error, t_table *table)
 void	status_print(int	philo_id, pthread_mutex_t *print_mutex, char *str, long long first_timestamp, char *color)
 {
 	pthread_mutex_lock(print_mutex);
+	//printf("%u ", real_time(first_timestamp));
+	//printf("%d ", philo_id);
+	//printf("%s\n",str);
 	printf("%s%u ms ▶ %s", KBLU, real_time(first_timestamp), DEF_COLOR);
 	printf("👤 Philo [%03d] ", philo_id);
 	printf("%s%s%s\n\n", color, str, DEF_COLOR);
@@ -73,9 +76,9 @@ void * philo_thread(void *philosopher)
 		philo_sleep (philo->data->time_to_eat);	
 		// Soltamos los tenedores
 		pthread_mutex_unlock(philo->mutex_fork_left);	
-		status_print(philo->num_philo, &philo->data->print_mtx, "has release left fork", philo->data->start_time, KYEL);
+		//status_print(philo->num_philo, &philo->data->print_mtx, "has release left fork", philo->data->start_time, KYEL);
 		pthread_mutex_unlock(philo->mutex_fork_right);
-		status_print(philo->num_philo, &philo->data->print_mtx, "has release right fork", philo->data->start_time, KYEL);
+		//status_print(philo->num_philo, &philo->data->print_mtx, "has release right fork", philo->data->start_time, KYEL);
 		// Dormimos
 		status_print(philo->num_philo, &philo->data->print_mtx, "is sleeping", philo->data->start_time, KCYN);
 		philo_sleep (philo->data->time_to_sleep);	
@@ -107,7 +110,8 @@ void * monitor (void *table_info)
 			if (time > table->philos[i].data->time_to_die)
 			{
 				table->philos[i].data->dead = 1;
-				printf ("Philo [%d] DIE\n", table->philos[i].num_philo);
+				status_print(table->philos[i].num_philo, &table->data.print_mtx, "die", table->data.start_time, KRED);
+				//printf ("Philo [%d] DIE\n", table->philos[i].num_philo);
 			}
 			i++;
 		}
