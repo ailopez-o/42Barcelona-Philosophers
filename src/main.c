@@ -42,16 +42,19 @@ void ft_error(int error, t_table *table)
 	free(table->forks);
 }
 
-void	status_print(int	philo_id, pthread_mutex_t *print_mutex, char *str, long long first_timestamp, char *color)
+void	status_print(t_philo *philo, char *str, char *color)
 {
-	pthread_mutex_lock(print_mutex);
-	//printf("%u ", real_time(first_timestamp));
-	//printf("%d ", philo_id);
-	//printf("%s\n",str);
-	printf("%s%u ms ▶ %s", KBLU, real_time(first_timestamp), DEF_COLOR);
-	printf("👤 Philo [%03d] ", philo_id);
-	printf("%s%s%s\n\n", color, str, DEF_COLOR);
-	pthread_mutex_unlock(print_mutex);
+	if (!philo->data->dead)
+	{
+		pthread_mutex_lock(&philo->data->print_mtx);
+		//printf("%u ", real_time(first_timestamp));
+		//printf("%d ", philo_id);
+		//printf("%s\n",str);
+		printf("%s%u ms ▶ %s", KBLU, real_time(philo->data->start_time), DEF_COLOR);
+		printf("👤 Philo [%03d] ", philo->num_philo);
+		printf("%s%s%s\n\n", color, str, DEF_COLOR);
+		pthread_mutex_unlock(&philo->data->print_mtx);
+	}
 }
 
 void * philo_thread(void *philosopher)
@@ -65,11 +68,11 @@ void * philo_thread(void *philosopher)
 	{
 		// Cogemos los tenedores
 		pthread_mutex_lock(philo->mutex_fork_left);
-		status_print(philo->num_philo, &philo->data->print_mtx, "has taken left fork", philo->data->start_time, KMAG);
+		status_print(philo, "has taken left fork", KMAG);
 		pthread_mutex_lock(philo->mutex_fork_right);
-		status_print(philo->num_philo, &philo->data->print_mtx, "has taken right fork", philo->data->start_time, KMAG);
+		status_print(philo, "has taken right fork", KMAG);
 		// Comemos 
-		status_print(philo->num_philo, &philo->data->print_mtx, "is eating",philo->data->start_time, KGRN);
+		status_print(philo, "is eating", KGRN);
 		// Guardamos el tiempo de la última comida
 		philo->last_meal = timestamp();
 		//printf ("LastMeal [%lli]\n", philo->last_meal);
@@ -80,10 +83,10 @@ void * philo_thread(void *philosopher)
 		pthread_mutex_unlock(philo->mutex_fork_right);
 		//status_print(philo->num_philo, &philo->data->print_mtx, "has release right fork", philo->data->start_time, KYEL);
 		// Dormimos
-		status_print(philo->num_philo, &philo->data->print_mtx, "is sleeping", philo->data->start_time, KCYN);
+		status_print(philo, "is sleeping", KCYN);
 		philo_sleep (philo->data->time_to_sleep);	
 		// Despertamos y pensamos hasta encontrar tenedor
-		status_print(philo->num_philo, &philo->data->print_mtx, "is thinking", philo->data->start_time, KWHT);
+		status_print(philo, "is thinking", KWHT);
 	}
 	return NULL;
 }
@@ -99,19 +102,14 @@ void * monitor (void *table_info)
 	// Checkea si hay algún philo que ha pasado el tiempo máximo desde la última comida
 	while (1 && !table->data.dead)
 	{
-		//printf ("Dead [%d]\n", table->data.dead);
-		//printf ("Monitoring\n");
 		i = 0;
 		while (i < table->num_philos)
 		{
-			//printf ("Monitoring\n");
 			time = real_time(table->philos[i].last_meal);
-			//printf ("Time Since Last Meal [%d] - [%d]\n", time, table->philos[i].data->time_to_die);
 			if (time > table->philos[i].data->time_to_die)
 			{
+				status_print(&table->philos[i], "die", KRED);
 				table->philos[i].data->dead = 1;
-				status_print(table->philos[i].num_philo, &table->data.print_mtx, "die", table->data.start_time, KRED);
-				//printf ("Philo [%d] DIE\n", table->philos[i].num_philo);
 			}
 			i++;
 		}
