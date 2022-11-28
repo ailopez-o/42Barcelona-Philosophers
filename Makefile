@@ -19,8 +19,8 @@ OBJ_DIR		:= obj/
 CC			:= gcc
 #CFLAGS		:= -g -Wall -Werror -Wextra
 CFLAGS		:= -g -Werror
-#FSANITIZE	:= -fsanitize=thread
-FSANITIZE	:= 
+FSANITIZE	:= -fsanitize=thread
+#FSANITIZE	:= 
 NOFLAGS		:= -g
 RM			:= rm -f
 
@@ -45,7 +45,7 @@ WHITE = \033[0;97m
 
 #Sources
 
-SRC_FILES	=	main utils
+SRC_FILES	=	main utils threading
 
 SRC 		= 	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ 		= 	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))

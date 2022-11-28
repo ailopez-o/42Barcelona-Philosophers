@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   threading.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ailopez- <ailopez-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/28 09:37:18 by ailopez-          #+#    #+#             */
-/*   Updated: 2022/11/28 09:37:29 by ailopez-         ###   ########.fr       */
+/*   Created: 2022/11/28 09:37:08 by ailopez-          #+#    #+#             */
+/*   Updated: 2022/11/28 09:37:11 by ailopez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../inc/defines.h"
-unsigned int	real_time(long long time);
-void			philo_sleep(long long time);
-long long		timestamp(void);
-void			ft_error(int error, t_table *table);
-void			status_print(t_philo *philo, char *str, char *color);
+void	free_mutex(t_table *table);
+void	threads_start(t_table *table);
+void	threads_join(t_table *table);
+void *	monitor (void *table_info);
+void *	philo_thread(void *philosopher);

@@ -11,172 +11,48 @@
 /* ************************************************************************** */
 #include "../inc/defines.h"
 #include "../inc/utils.h"
+#include "../inc/threading.h"
 #include "../lib/ft_printf/inc/ft_printf.h"
 
-void	threads_join(t_table *table)
-{
-	int		i;
-	
-	i = 0; 
-	while (i < table->num_philos)
-	{
-		pthread_join(table->philos[i].thread_id, NULL);
-		i++;
-	}
-	pthread_join(table->monitor, NULL);
-}
-
-void ft_error(int error, t_table *table)
-{
-	if (error == INVALID_ARGS)
-	{
-		ft_putstr_fd("Invalid arguments\n", 0);
-		exit (INVALID_ARGS);
-	}
-	if (error == ENOMEM)
-	{
-		ft_putstr_fd("Out of memory\n", 0);
-		exit (ENOMEM);
-	}
-	free(table->philos);
-	free(table->forks);
-}
-
-void	status_print(t_philo *philo, char *str, char *color)
-{
-	if (!philo->data->dead)
-	{
-		pthread_mutex_lock(&philo->data->print_mtx);
-		//printf("%u ", real_time(first_timestamp));
-		//printf("%d ", philo_id);
-		//printf("%s\n",str);
-		printf("%s%u ms ▶ %s", KBLU, real_time(philo->data->start_time), DEF_COLOR);
-		printf("👤 Philo [%03d] ", philo->num_philo);
-		printf("%s%s%s\n\n", color, str, DEF_COLOR);
-		pthread_mutex_unlock(&philo->data->print_mtx);
-	}
-}
-
-void * philo_thread(void *philosopher)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)philosopher;
-	if (!(philo->num_philo % 2))
-		usleep(15000);
-	while (!philo->data->dead)
-	{
-		// Cogemos los tenedores
-		pthread_mutex_lock(philo->mutex_fork_left);
-		status_print(philo, "has taken left fork", KMAG);
-		pthread_mutex_lock(philo->mutex_fork_right);
-		status_print(philo, "has taken right fork", KMAG);
-		// Comemos 
-		status_print(philo, "is eating", KGRN);
-		// Guardamos el tiempo de la última comida
-		philo->last_meal = timestamp();
-		//printf ("LastMeal [%lli]\n", philo->last_meal);
-		philo_sleep (philo->data->time_to_eat);
-		// Soltamos los tenedores
-		pthread_mutex_unlock(philo->mutex_fork_left);
-		//status_print(philo->num_philo, &philo->data->print_mtx, "has release left fork", philo->data->start_time, KYEL);
-		pthread_mutex_unlock(philo->mutex_fork_right);
-		//status_print(philo->num_philo, &philo->data->print_mtx, "has release right fork", philo->data->start_time, KYEL);
-		// Dormimos
-		status_print(philo, "is sleeping", KCYN);
-		philo_sleep (philo->data->time_to_sleep);	
-		// Despertamos y pensamos hasta encontrar tenedor
-		status_print(philo, "is thinking", KWHT);
-	}
-	return NULL;
-}
-
-void * monitor (void *table_info)
-{
-	int i;
-	unsigned int time;
-	unsigned int diff;
-	t_table	*table;
-
-	table = (t_table *)table_info;
-	// Checkea si hay algún philo que ha pasado el tiempo máximo desde la última comida
-	while (1 && !table->data.dead)
-	{
-		i = 0;
-		while (i < table->num_philos)
-		{
-			time = real_time(table->philos[i].last_meal);
-			if (time > table->philos[i].data->time_to_die)
-			{
-				status_print(&table->philos[i], "die", KRED);
-				table->philos[i].data->dead = 1;
-			}
-			i++;
-		}
-		usleep(100);
-	}
-	return NULL;
-}
-
-void	thread_start(t_table *table)
+void	init_mutex(t_table *table)
 {
 	int		i;
 
-	// Inicializamos el clock
-	table->data.start_time = timestamp();
-	i = 0;
-	while (i < table->num_philos)
-	{
-		// Creamos los hilos de cada philo
-		if (pthread_create(&table->philos[i].thread_id, NULL, philo_thread, &table->philos[i]))
-			ft_error (ENOMEM, table);
-		// Asignamos el tiempo de le última comida
-		table->philos[i].last_meal = timestamp();
-		i++;
-	}
-}
-
-void	init_threads_and_mutex(t_table *table)
-{
-	int		i;
-
-	//	Alocamos memoria para los id de los threads
-	if (!(table->philos = malloc (sizeof(t_philo) * table->num_philos)))
+	table->forks = malloc (sizeof(pthread_mutex_t) * table->num_philos);
+	if (table->forks == NULL)
 		ft_error (ENOMEM, table);
-	//	Alocamos memoria para los forks
-	if (!(table->forks = malloc (sizeof(pthread_mutex_t)* table->num_philos)))
-		ft_error (ENOMEM, table);
-	// Inicializamos el mutex del printf
 	pthread_mutex_init(&table->data.print_mtx, NULL);
-	// Creamos los mutex de los forks
-	i = 0;
-	while (i < table->num_philos)
+	i = -1;
+	while (++i < table->num_philos)
 	{
 		if (pthread_mutex_init(&table->forks[i], NULL))
 			ft_error (ENOMEM, table);
-		i++;
 	}
-	i = 0;
-	// Inicializamos los philosophos
-	while (i < table->num_philos)
+}
+
+void	init_threads(t_table *table)
+{
+	int		i;
+
+	table->philos = malloc (sizeof(t_philo) * table->num_philos);
+	if (table->philos == NULL)
+		ft_error (ENOMEM, table);
+	i = -1;
+	while (++i < table->num_philos)
 	{
-		// Escribimos el numero de philo
 		table->philos[i].num_philo = i + 1;
-		// Asignamos los tenedores
 		table->philos[i].mutex_fork_left = &table->forks[i];
 		if (i == 0)
-			table->philos[i].mutex_fork_right = &table->forks[table->num_philos - 1];
+			table->philos[i].mutex_fork_right = \
+			&table->forks[table->num_philos - 1];
 		else
 			table->philos[i].mutex_fork_right = &table->forks[i - 1];
 		table->data.dead = 0;
-		// Asignamos los datos a cada philo
 		table->philos[i].data = &table->data;
-		i++;
 	}
-	thread_start(table);
-	// Arrancamos el hilo monitor
+	threads_start(table);
 	if (pthread_create(&table->monitor, NULL, monitor, table))
-			ft_error (ENOMEM, table);	
+		ft_error (ENOMEM, table);
 }
 
 void	parsing_args(int argv, char **argc, t_table *table)
@@ -189,15 +65,7 @@ void	parsing_args(int argv, char **argc, t_table *table)
 	table->data.time_to_sleep = ft_atoi(argc[4]);
 	if (argv == 6)
 		table->data.number_time_eats = ft_atoi(argc[5]);
-	//ft_printf("NumPhilos [%d]\n", table->num_philos);
-	//ft_printf("TimeToDie [%d]\n", table->data.time_to_die);
-	//ft_printf("TimeToEat [%d]\n", table->data.time_to_eat);
-	//ft_printf("TimeToSleep [%d]\n", table->data.time_to_sleep);	
-	//if (argv == 6)
-	//	ft_printf("NumTimeEats [%d]\n", table->data.number_time_eats);
 }
-
-
 
 int main (int argv, char **argc)
 {
@@ -206,9 +74,12 @@ int main (int argv, char **argc)
 	// Parseamos
 	parsing_args(argv, argc, &table);
 	// Inicializamos threads and mutex
-	init_threads_and_mutex(&table);	
+	init_mutex(&table);
+	init_threads(&table);
 	// Esperamos a que terminen todos los hilos
 	threads_join (&table);
+	// Liberamos los mutex
+	free_mutex(&table);
 	// Liberamos los mallocs
 	free(table.philos);
 	free(table.forks);		
