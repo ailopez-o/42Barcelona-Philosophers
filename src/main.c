@@ -67,21 +67,17 @@ void	parsing_args(int argv, char **argc, t_table *table)
 		table->data.number_time_eats = ft_atoi(argc[5]);
 }
 
-int main (int argv, char **argc)
+int	main(int argv, char **argc)
 {
-	t_table	table;
+	t_table			table;
 	unsigned long	time;
-	// Parseamos
+
 	parsing_args(argv, argc, &table);
-	// Inicializamos threads and mutex
 	init_mutex(&table);
 	init_threads(&table);
-	// Esperamos a que terminen todos los hilos
 	threads_join (&table);
-	// Liberamos los mutex
 	free_mutex(&table);
-	// Liberamos los mallocs
 	free(table.philos);
-	free(table.forks);		
-	return(0);
+	free(table.forks);
+	return (0);
 }

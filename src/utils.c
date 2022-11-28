@@ -26,7 +26,7 @@ long long	timestamp(void)
 	return (l);
 }
 
-unsigned int real_time(long long time)
+unsigned int	real_time(long long time)
 {
 	long long	now;
 
@@ -36,10 +36,10 @@ unsigned int real_time(long long time)
 
 void	philo_sleep(long long time)
 {
-	long long init_time;
+	long long	init_time;
 
 	init_time = timestamp();
-	while(1)
+	while (1)
 	{
 		if ((timestamp() - init_time) >= time)
 			break ;
@@ -47,7 +47,7 @@ void	philo_sleep(long long time)
 	}
 }
 
-void ft_error(int error, t_table *table)
+void	ft_error(int error, t_table *table)
 {
 	if (error == INVALID_ARGS)
 	{
@@ -71,7 +71,8 @@ void	status_print(t_philo *philo, char *str, char *color)
 		//printf("%u ", real_time(first_timestamp));
 		//printf("%d ", philo_id);
 		//printf("%s\n",str);
-		printf("%s%u ms ▶ %s", KBLU, real_time(philo->data->start_time), DEF_COLOR);
+		printf("%s%u ms ▶ %s", KBLU, real_time(philo->data->start_time), \
+			DEF_COLOR);
 		printf("👤 Philo [%03d] ", philo->num_philo);
 		printf("%s%s%s\n\n", color, str, DEF_COLOR);
 		pthread_mutex_unlock(&philo->data->print_mtx);

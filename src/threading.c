@@ -12,7 +12,7 @@
 #include "../inc/defines.h"
 #include "../inc/utils.h"
 
-void * philo_thread(void *philosopher)
+void	*philo_thread(void *philosopher)
 {
 	t_philo	*philo;
 
@@ -21,40 +21,29 @@ void * philo_thread(void *philosopher)
 		usleep(15000);
 	while (!philo->data->dead)
 	{
-		// Cogemos los tenedores
 		pthread_mutex_lock(philo->mutex_fork_left);
 		status_print(philo, "has taken left fork", KMAG);
 		pthread_mutex_lock(philo->mutex_fork_right);
 		status_print(philo, "has taken right fork", KMAG);
-		// Comemos 
 		status_print(philo, "is eating", KGRN);
-		// Guardamos el tiempo de la última comida
 		philo->last_meal = timestamp();
-		//printf ("LastMeal [%lli]\n", philo->last_meal);
 		philo_sleep (philo->data->time_to_eat);
-		// Soltamos los tenedores
 		pthread_mutex_unlock(philo->mutex_fork_left);
-		//status_print(philo->num_philo, &philo->data->print_mtx, "has release left fork", philo->data->start_time, KYEL);
 		pthread_mutex_unlock(philo->mutex_fork_right);
-		//status_print(philo->num_philo, &philo->data->print_mtx, "has release right fork", philo->data->start_time, KYEL);
-		// Dormimos
 		status_print(philo, "is sleeping", KCYN);
 		philo_sleep (philo->data->time_to_sleep);
-		// Despertamos y pensamos hasta encontrar tenedor
 		status_print(philo, "is thinking", KWHT);
 	}
-	return NULL;
+	return (NULL);
 }
 
-void * monitor (void *table_info)
+void	*monitor(void *table_info)
 {
-	int i;
-	unsigned int time;
-	unsigned int diff;
-	t_table	*table;
+	int				i;
+	unsigned int	time;
+	t_table			*table;
 
 	table = (t_table *)table_info;
-	// Checkea si hay algún philo que ha pasado el tiempo máximo desde la última comida
 	while (1 && !table->data.dead)
 	{
 		i = -1;
@@ -69,14 +58,14 @@ void * monitor (void *table_info)
 		}
 		usleep(100);
 	}
-	return NULL;
+	return (NULL);
 }
 
 void	threads_join(t_table *table)
 {
 	int		i;
-	
-	i = -1; 
+
+	i = -1;
 	while (++i < table->num_philos)
 		pthread_join(table->philos[i].thread_id, NULL);
 	pthread_join(table->monitor, NULL);
@@ -90,19 +79,20 @@ void	threads_start(t_table *table)
 	i = -1;
 	while (++i < table->num_philos)
 	{
-		if (pthread_create(&table->philos[i].thread_id, NULL, philo_thread, &table->philos[i]))
+		if (pthread_create(&table->philos[i].thread_id, \
+			NULL, philo_thread, &table->philos[i]))
 			ft_error (ENOMEM, table);
 		table->philos[i].last_meal = timestamp();
 	}
 }
 
-void free_mutex(t_table *table)
+void	free_mutex(t_table *table)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < table->num_philos)
-	pthread_join(table->philos[i].thread_id, NULL);
+		pthread_join(table->philos[i].thread_id, NULL);
 	i = -1;
 	while (++i < table->num_philos)
 		pthread_mutex_destroy(&(table->forks[i]));

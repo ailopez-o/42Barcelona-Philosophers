@@ -9,9 +9,14 @@
 /*   Updated: 2022/11/28 09:37:11 by ailopez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../inc/defines.h"
+#ifndef THREADING_H
+# define THREADING_H
+
+# include "../inc/defines.h"
+
 void	free_mutex(t_table *table);
 void	threads_start(t_table *table);
 void	threads_join(t_table *table);
-void *	monitor (void *table_info);
-void *	philo_thread(void *philosopher);
+void	*monitor(void *table_info);
+void	*philo_thread(void *philosopher);
+#endif
