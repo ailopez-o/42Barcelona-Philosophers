@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 #include "../inc/defines.h"
 #include "../inc/utils.h"
-#include "../lib/ft_printf/inc/ft_printf.h"
 
 void	*philo_thread(void *philosopher)
 {

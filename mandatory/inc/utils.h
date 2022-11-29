@@ -19,4 +19,5 @@ void			philo_sleep(long long time);
 long long		timestamp(void);
 void			ft_error(int error, t_table *table);
 void			status_print(t_philo *philo, char *str, char *color);
+int	            ft_atoi(const char *str);
 #endif

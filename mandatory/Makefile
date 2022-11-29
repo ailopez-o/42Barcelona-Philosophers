@@ -24,11 +24,7 @@ FSANITIZE	:=
 NOFLAGS		:= -g
 RM			:= rm -f
 
-INC		 		:= inc/
-LIB				:= lib/
-PRINTF_DIR		:= $(LIB)ft_printf/
-PRINTF			:= $(PRINTF_DIR)libftprintf.a
-HEADER 			:= -I$(INC) -I$(PRINTF_DIR)
+HEADER 			:= -I$(INC)
 PTHREAD			= -pthread
 
 # Colors
@@ -45,7 +41,7 @@ WHITE = \033[0;97m
 
 #Sources
 
-SRC_FILES	=	main utils threading
+SRC_FILES	=	main utils threading libft
 
 SRC 		= 	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ 		= 	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
@@ -55,11 +51,8 @@ INCS		= 	$(addprefix $(INCLUDE), $(addsuffix .h, $(INC_FILES)))
 
 OBJF		=	.cache_exists
 
-all:	makelibs
+all:	
 		@$(MAKE) $(NAME)
-
-makelibs:	
-	@$(MAKE) -C $(PRINTF_DIR)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(INCS) | $(OBJF)
 			@echo "🍩 $(YELLOW)Compiling: $< $(DEF_COLOR)"
@@ -68,7 +61,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(INCS) | $(OBJF)
 -include 	${DEPS}
 $(NAME):	$(OBJ) Makefile
 			@$(CC) $(CFLAGS) $(PTHREAD) $(FSANITIZE) $(OBJ) $(PRINTF) -o $(NAME)		
-			@echo "👉 $(BLUE)$(CC) $(CFLAGS) $(PTHREAD) $(FSANITIZE) $(OBJ) $(PRINTF) -o $(NAME)$(DEF_COLOR)"
+			@echo "👉 $(BLUE)$(CC) $(CFLAGS) $(PTHREAD) $(FSANITIZE) $(OBJ) -o $(NAME)$(DEF_COLOR)"
 			@echo "$(GREEN)✨ Philosophers compiled!$(DEF_COLOR)"
 
 bonus:		
@@ -79,17 +72,12 @@ $(OBJF):
 		
 
 clean:
-			@make clean -sC $(PRINTF_DIR)
-			@echo "$(CYAN)ft_printf object and dependency files cleaned.$(DEF_COLOR)"
 			$(RM) -rf $(OBJ_DIR)
 			@echo "$(CYAN)Philosophers object files cleaned!$(DEF_COLOR)"
 
 fclean:		clean
 			$(RM) -f $(NAME)
 			@echo "$(CYAN)Philosophers executable files cleaned!$(DEF_COLOR)"	
-			$(RM) -f $(PRINTF_DIR)libftprintf.a
-			@echo "$(CYAN)libftprintf.a lib cleaned!$(DEF_COLOR)"
-
 
 re:			fclean 
 			@$(MAKE)	

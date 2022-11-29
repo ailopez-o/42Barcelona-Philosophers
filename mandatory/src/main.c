@@ -12,7 +12,6 @@
 #include "../inc/defines.h"
 #include "../inc/utils.h"
 #include "../inc/threading.h"
-#include "../lib/ft_printf/inc/ft_printf.h"
 
 void	init_mutex(t_table *table)
 {
