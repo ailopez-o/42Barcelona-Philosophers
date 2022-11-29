@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 #include "../inc/defines.h"
 #include "../inc/utils.h"
+#include "../lib/ft_printf/inc/ft_printf.h"
 
 void	*philo_thread(void *philosopher)
 {
@@ -26,6 +27,7 @@ void	*philo_thread(void *philosopher)
 		pthread_mutex_lock(philo->mutex_fork_right);
 		status_print(philo, "has taken right fork", KMAG);
 		status_print(philo, "is eating", KGRN);
+		philo->num_eats++;
 		philo->last_meal = timestamp();
 		philo_sleep (philo->data->time_to_eat);
 		pthread_mutex_unlock(philo->mutex_fork_left);
@@ -33,6 +35,9 @@ void	*philo_thread(void *philosopher)
 		status_print(philo, "is sleeping", KCYN);
 		philo_sleep (philo->data->time_to_sleep);
 		status_print(philo, "is thinking", KWHT);
+		if (philo->data->number_time_eats != 0 && \
+			philo->num_eats >= philo->data->number_time_eats)
+			philo->data->dead = 1;	
 	}
 	return (NULL);
 }
@@ -52,7 +57,8 @@ void	*monitor(void *table_info)
 			time = real_time(table->philos[i].last_meal);
 			if (time > table->philos[i].data->time_to_die)
 			{
-				status_print(&table->philos[i], "die", KRED);
+				if (table->data.number_time_eats == 0)
+					status_print(&table->philos[i], "die", KRED);
 				table->philos[i].data->dead = 1;
 			}
 		}

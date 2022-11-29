@@ -57,6 +57,7 @@ typedef struct s_philo {
 	pthread_mutex_t		*mutex_fork_right;
 	long long			last_meal;	
 	t_data				*data;
+	int					num_eats;
 }	t_philo;
 
 typedef struct s_table {

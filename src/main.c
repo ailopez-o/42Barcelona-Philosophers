@@ -48,6 +48,7 @@ void	init_threads(t_table *table)
 		else
 			table->philos[i].mutex_fork_right = &table->forks[i - 1];
 		table->data.dead = 0;
+		table->philos[i].num_eats = 0;
 		table->philos[i].data = &table->data;
 	}
 	threads_start(table);
@@ -63,8 +64,14 @@ void	parsing_args(int argv, char **argc, t_table *table)
 	table->data.time_to_die = ft_atoi(argc[2]);
 	table->data.time_to_eat = ft_atoi(argc[3]);
 	table->data.time_to_sleep = ft_atoi(argc[4]);
+	table->data.number_time_eats = 0;
 	if (argv == 6)
 		table->data.number_time_eats = ft_atoi(argc[5]);
+	if (table->num_philos < 2)
+		ft_error(INVALID_ARGS, table);
+	if (table->data.time_to_die < 0 || table->data.time_to_eat < 0 || \
+		table->data.time_to_sleep < 0)
+		ft_error(INVALID_ARGS, table);
 }
 
 int	main(int argv, char **argc)
