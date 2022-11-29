@@ -1,3 +1,0 @@
-[submodule "lib/ft_printf"]
-	path = lib/ft_printf
-	url = git@github.com:ailopez-o/42Barcelona-Printf.git
