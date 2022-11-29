@@ -14,8 +14,22 @@
 
 NAME		:= philo
 
-MANDATORY_DIR	:= mandatory/
-BONUS_DIR		:= bonus/
+SRC_DIR		:= src/
+OBJ_DIR		:= obj/
+CC			:= gcc
+#CFLAGS		:= -g -Wall -Werror -Wextra
+CFLAGS		:= -g -Werror
+#FSANITIZE	:= -fsanitize=thread
+FSANITIZE	:= 
+NOFLAGS		:= -g
+RM			:= rm -f
+
+INC		 		:= inc/
+LIB				:= lib/
+PRINTF_DIR		:= $(LIB)ft_printf/
+PRINTF			:= $(PRINTF_DIR)libftprintf.a
+HEADER 			:= -I$(INC) -I$(PRINTF_DIR)
+PTHREAD			= -pthread
 
 # Colors
 
@@ -30,26 +44,48 @@ CYAN = \033[0;96m
 WHITE = \033[0;97m
 
 #Sources
- 
-all:	
-		@$(MAKE) -C $(MANDATORY_DIR)
-		@$(MAKE) -C $(BONUS_DIR)
 
-$(NAME):
-		@$(MAKE) -C $(MANDATORY_DIR)
+SRC_FILES	=	main utils threading
+
+SRC 		= 	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
+OBJ 		= 	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
+DEPS 		= 	$(addprefix $(OBJ_DIR), $(addsuffix .d, $(SRC_FILES)))
+INCS		= 	$(addprefix $(INCLUDE), $(addsuffix .h, $(INC_FILES)))
+###
+
+OBJF		=	.cache_exists
+
+all:	makelibs
+		@$(MAKE) $(NAME)
+
+makelibs:	
+	@$(MAKE) -C $(PRINTF_DIR)
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(INCS) | $(OBJF)
+			@echo "🍩 $(YELLOW)Compiling: $< $(DEF_COLOR)"
+			$(CC) $(CFLAGS) $(PTHREAD) -MMD -c $< -o $@	
+
+-include 	${DEPS}
+$(NAME):	$(OBJ) Makefile
+			@$(CC) $(CFLAGS) $(PTHREAD) $(FSANITIZE) $(OBJ) $(PRINTF) -o $(NAME)		
+			@echo "👉 $(BLUE)$(CC) $(CFLAGS) $(PTHREAD) $(FSANITIZE) $(OBJ) $(PRINTF) -o $(NAME)$(DEF_COLOR)"
+			@echo "$(GREEN)✨ Philosophers compiled!$(DEF_COLOR)"
 
 bonus:		
-		@$(MAKE) -C $(BONUS_DIR)
+			@$(MAKE) all
+			
+$(OBJF):
+			@mkdir -p $(OBJ_DIR)
 		
 
 clean:
-			@make clean -sC $(MANDATORY_DIR)
-			@echo "$(CYAN)Philosophers object and dependency files cleaned.$(DEF_COLOR)"
+			@make clean -sC $(PRINTF_DIR)
+			@echo "$(CYAN)ft_printf object and dependency files cleaned.$(DEF_COLOR)"
 			$(RM) -rf $(OBJ_DIR)
 			@echo "$(CYAN)Philosophers object files cleaned!$(DEF_COLOR)"
 
 fclean:		clean
-			$(RM) -f $(MANDATORY_DIR)
+			$(RM) -f $(NAME)
 			@echo "$(CYAN)Philosophers executable files cleaned!$(DEF_COLOR)"	
 			$(RM) -f $(PRINTF_DIR)libftprintf.a
 			@echo "$(CYAN)libftprintf.a lib cleaned!$(DEF_COLOR)"
