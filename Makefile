@@ -44,15 +44,11 @@ bonus:
 
 clean:
 			@make clean -sC $(MANDATORY_DIR)
-			@echo "$(CYAN)Philosophers object and dependency files cleaned.$(DEF_COLOR)"
-			$(RM) -rf $(OBJ_DIR)
-			@echo "$(CYAN)Philosophers object files cleaned!$(DEF_COLOR)"
+			@make clean -sC $(BONUS_DIR)
 
-fclean:		clean
-			$(RM) -f $(MANDATORY_DIR)
-			@echo "$(CYAN)Philosophers executable files cleaned!$(DEF_COLOR)"	
-			$(RM) -f $(PRINTF_DIR)libftprintf.a
-			@echo "$(CYAN)libftprintf.a lib cleaned!$(DEF_COLOR)"
+fclean:		
+			@make fclean -sC $(MANDATORY_DIR)
+			@make fclean -sC $(BONUS_DIR)
 
 
 re:			fclean 

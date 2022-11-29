@@ -62,7 +62,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(INCS) | $(OBJF)
 $(NAME):	$(OBJ) Makefile
 			@$(CC) $(CFLAGS) $(PTHREAD) $(FSANITIZE) $(OBJ) $(PRINTF) -o $(NAME)		
 			@echo "👉 $(BLUE)$(CC) $(CFLAGS) $(PTHREAD) $(FSANITIZE) $(OBJ) -o $(NAME)$(DEF_COLOR)"
-			@echo "$(GREEN)✨ Philosophers Mandatory compiled!$(DEF_COLOR)"
+			@echo "$(GREEN)✨ Philosophers Bonus compiled!$(DEF_COLOR)"
 
 bonus:		
 			@$(MAKE) all
@@ -73,15 +73,15 @@ $(OBJF):
 
 clean:
 			$(RM) -rf $(OBJ_DIR)
-			@echo "$(CYAN)Philosophers Mandatory object files cleaned!$(DEF_COLOR)"
+			@echo "$(CYAN)Philosophers Bonus object files cleaned!$(DEF_COLOR)"
 
 fclean:		clean
 			$(RM) -f $(NAME)
-			@echo "$(CYAN)Philosophers Mandatory executable files cleaned!$(DEF_COLOR)"	
+			@echo "$(CYAN)Philosophers Bonus executable files cleaned!$(DEF_COLOR)"	
 
 re:			fclean 
 			@$(MAKE)	
-			@echo "$(GREEN)Cleaned and rebuilt everything for Philosophers Mandatory!$(DEF_COLOR)"
+			@echo "$(GREEN)Cleaned and rebuilt everything for Philosophers Bonus!$(DEF_COLOR)"
 
 norm:
 			@norminette $(SRC) $(INCLUDE) | grep -v Norme -B1 || true
