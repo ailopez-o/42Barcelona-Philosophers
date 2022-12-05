@@ -20,6 +20,8 @@
 
 # define INVALID_ARGS	22
 # define ENOMEM			12
+# define MUTEX_ERROR	40
+# define PRINTF_ERROR	41
 
 # define DEF_COLOR	"\033[0;39m"
 # define GRAY		"\033[0;90m"
