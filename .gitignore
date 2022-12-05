@@ -8,6 +8,8 @@
 *.elf
 philo
 philo_bonus
+_philo
+_philo_bonus
 
 # Linker output
 *.ilk

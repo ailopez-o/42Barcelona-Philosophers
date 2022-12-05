@@ -14,8 +14,8 @@
 
 NAME		:= philo
 
-MANDATORY_DIR	:= mandatory/
-BONUS_DIR		:= bonus/
+MANDATORY_DIR	:= philo/
+BONUS_DIR		:= philo_bonus/
 
 # Colors
 
@@ -33,17 +33,17 @@ WHITE = \033[0;97m
  
 all:	
 		@$(MAKE) -C $(MANDATORY_DIR)
-		@cp $(MANDATORY_DIR)philo philo
+		@cp $(MANDATORY_DIR)philo _philo
 		@$(MAKE) -C $(BONUS_DIR)
-		@cp $(BONUS_DIR)philo philo_bonus
+		@cp $(BONUS_DIR)philo_bonus _philo_bonus
 
 $(NAME):
 		@$(MAKE) -C $(MANDATORY_DIR)
-		@cp $(MANDATORY_DIR)philo philo
+		@cp $(MANDATORY_DIR)philo _philo
 
 bonus:		
 		@$(MAKE) -C $(BONUS_DIR)
-		@cp $(BONUS_DIR)philo philo_bonus
+		@cp $(BONUS_DIR)philo_bonus _philo_bonus
 		
 
 clean:
