@@ -47,20 +47,24 @@ void	philo_sleep(long long time)
 	}
 }
 
-void	ft_error(int error, t_table *table)
+static int	write_error(char *str)
+{
+	int	len;
+
+	len = 0;
+	while (str[len])
+		len++;
+	return (write(2, str, len));
+}
+
+
+int	ft_error(int error)
 {
 	if (error == INVALID_ARGS)
-	{
-		printf("Invalid arguments\n");
-		exit (INVALID_ARGS);
-	}
+		write_error("Invalid arguments\n");
 	if (error == ENOMEM)
-	{
-		printf("Out of memory\n");
-		exit (ENOMEM);
-	}
-	free(table->philos);
-	free(table->forks);
+		write_error("Out of memory\n");
+	return (error);	
 }
 
 /*

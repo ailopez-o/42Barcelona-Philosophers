@@ -13,29 +13,30 @@
 #include "../inc/utils.h"
 #include "../inc/threading.h"
 
-void	init_mutex(t_table *table)
+int	init_mutex(t_table *table)
 {
 	int		i;
 
 	table->forks = malloc (sizeof(pthread_mutex_t) * table->num_philos);
 	if (table->forks == NULL)
-		ft_error (ENOMEM, table);
+		return (ft_error (ENOMEM));
 	pthread_mutex_init(&table->data.print_mtx, NULL);
 	i = -1;
 	while (++i < table->num_philos)
 	{
 		if (pthread_mutex_init(&table->forks[i], NULL))
-			ft_error (ENOMEM, table);
+			return (ft_error (ENOMEM));
 	}
+	return (0);
 }
 
-void	init_threads(t_table *table)
+int	init_threads(t_table *table)
 {
 	int		i;
 
 	table->philos = malloc (sizeof(t_philo) * table->num_philos);
 	if (table->philos == NULL)
-		ft_error (ENOMEM, table);
+		return (ft_error (ENOMEM));
 	i = -1;
 	while (++i < table->num_philos)
 	{
@@ -50,15 +51,17 @@ void	init_threads(t_table *table)
 		table->philos[i].num_eats = 0;
 		table->philos[i].data = &table->data;
 	}
-	threads_start(table);
+	if (threads_start(table))
+		return (ft_error (ENOMEM));
 	if (pthread_create(&table->monitor, NULL, monitor, table))
-		ft_error (ENOMEM, table);
+		return (ft_error (ENOMEM));
+	return (0);
 }
 
-void	parsing_args(int argv, char **argc, t_table *table)
+int	parsing_args(int argv, char **argc, t_table *table)
 {
 	if (argv < 5)
-		ft_error(INVALID_ARGS, table);
+		return (ft_error (INVALID_ARGS));
 	table->num_philos = ft_atoi(argc[1]);
 	table->data.time_to_die = ft_atoi(argc[2]);
 	table->data.time_to_eat = ft_atoi(argc[3]);
@@ -67,10 +70,11 @@ void	parsing_args(int argv, char **argc, t_table *table)
 	if (argv == 6)
 		table->data.number_time_eats = ft_atoi(argc[5]);
 	if (table->num_philos < 2)
-		ft_error(INVALID_ARGS, table);
+		return (ft_error (INVALID_ARGS));
 	if (table->data.time_to_die < 0 || table->data.time_to_eat < 0 || \
 		table->data.time_to_sleep < 0)
-		ft_error(INVALID_ARGS, table);
+		return (ft_error (INVALID_ARGS));
+	return (0);
 }
 
 int	main(int argv, char **argc)
@@ -78,11 +82,16 @@ int	main(int argv, char **argc)
 	t_table			table;
 	unsigned long	time;
 
-	parsing_args(argv, argc, &table);
-	init_mutex(&table);
-	init_threads(&table);
-	threads_join (&table);
-	free_mutex(&table);
+	if (parsing_args(argv, argc, &table))
+		return (1);
+	if (init_mutex(&table))
+		return (1);
+	if (init_threads(&table))
+		return (1);
+	if (threads_join (&table))
+		return (1);
+	if (free_mutex(&table))
+		return (1);
 	free(table.philos);
 	free(table.forks);
 	return (0);

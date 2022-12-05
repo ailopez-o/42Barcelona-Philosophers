@@ -489,3 +489,18 @@
   log.py: at 416, the fork philosopher 175 grabbed was not yet released
   log.py: at 448, the fork philosopher 143 grabbed was not yet released
   log.py: at 458, the fork philosopher 189 grabbed was not yet released
+  log.py: ./philo ['./tester_philosophers/advanced_test.py', '3', '200', '400', '800']
+  log.py: ./philo ['./tester_philosophers/advanced_test.py', '3', '600', '400', '100']
+  log.py: ./philo ['./tester_philosophers/advanced_test.py', '3', '800', '400', '100']
+  log.py: ./philo ['./tester_philosophers/advanced_test.py', '4', '600', '350', '100']
+  log.py: ./philo ['./tester_philosophers/advanced_test.py', '4', '390', '200', '200']
+  log.py: ./philo ['./tester_philosophers/advanced_test.py', '5', '800', '400', '100']
+  log.py: log format is wrong 400 3 is sleeping
+
+  log.py: at 500, philosopher 3 slept 400ms longer
+  log.py: at 400, the fork philosopher 4 grabbed was not yet released
+  log.py: at 400, the fork philosopher 2 grabbed was not yet released
+  log.py: ./philo ['./tester_philosophers/advanced_test.py', '15', '200', '400', '800']
+  log.py: ./philo ['./tester_philosophers/advanced_test.py', '3', '200', '400', '800']
+  log.py: ./philo ['./tester_philosophers/advanced_test.py', '3', '600', '400', '100']
+  log.py: ./philo ['./tester_philosophers/advanced_test.py', '3', '800', '400', '100']

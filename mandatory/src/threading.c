@@ -69,7 +69,7 @@ void	*monitor(void *table_info)
 	return (NULL);
 }
 
-void	threads_join(t_table *table)
+int	threads_join(t_table *table)
 {
 	int		i;
 
@@ -77,9 +77,10 @@ void	threads_join(t_table *table)
 	while (++i < table->num_philos)
 		pthread_join(table->philos[i].thread_id, NULL);
 	pthread_join(table->monitor, NULL);
+	return (0);
 }
 
-void	threads_start(t_table *table)
+int	threads_start(t_table *table)
 {
 	int		i;
 
@@ -89,20 +90,19 @@ void	threads_start(t_table *table)
 	{
 		if (pthread_create(&table->philos[i].thread_id, \
 			NULL, philo_thread, &table->philos[i]))
-			ft_error (ENOMEM, table);
+			return (ENOMEM);
 		table->philos[i].last_meal = timestamp();
 	}
+	return (0);
 }
 
-void	free_mutex(t_table *table)
+int	free_mutex(t_table *table)
 {
 	int	i;
 
 	i = -1;
 	while (++i < table->num_philos)
-		pthread_join(table->philos[i].thread_id, NULL);
-	i = -1;
-	while (++i < table->num_philos)
 		pthread_mutex_destroy(&(table->forks[i]));
 	pthread_mutex_destroy(&(table->data.print_mtx));
+	return (0);
 }
