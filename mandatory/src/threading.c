@@ -22,18 +22,18 @@ void	*philo_thread(void *philosopher)
 	while (!philo->data->dead)
 	{
 		pthread_mutex_lock(philo->mutex_fork_left);
-		status_print(philo, "has taken left fork", KMAG);
+		status_print(philo, "has taken a fork", KMAG, 0);
 		pthread_mutex_lock(philo->mutex_fork_right);
-		status_print(philo, "has taken right fork", KMAG);
-		status_print(philo, "is eating", KGRN);
+		status_print(philo, "has taken a fork", KMAG, 0);
+		status_print(philo, "is eating", KGRN, 0);
 		philo->num_eats++;
 		philo->last_meal = timestamp();
 		philo_sleep (philo->data->time_to_eat);
 		pthread_mutex_unlock(philo->mutex_fork_left);
 		pthread_mutex_unlock(philo->mutex_fork_right);
-		status_print(philo, "is sleeping", KCYN);
+		status_print(philo, "is sleeping", KCYN, 0);
 		philo_sleep (philo->data->time_to_sleep);
-		status_print(philo, "is thinking", KWHT);
+		status_print(philo, "is thinking", KWHT, 0);
 		if (philo->data->number_time_eats != 0 && \
 			philo->num_eats >= philo->data->number_time_eats)
 			philo->data->dead = 1;	
@@ -56,9 +56,12 @@ void	*monitor(void *table_info)
 			time = real_time(table->philos[i].last_meal);
 			if (time > table->philos[i].data->time_to_die)
 			{
-				if (table->data.number_time_eats == 0)
-					status_print(&table->philos[i], "die", KRED);
 				table->philos[i].data->dead = 1;
+				if (table->data.number_time_eats == 0)
+				{
+					status_print(&table->philos[i], "died", KRED, 1);
+					return (NULL);
+				}			
 			}
 		}
 		usleep(100);

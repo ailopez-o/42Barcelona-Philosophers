@@ -7,6 +7,7 @@
 *.obj
 *.elf
 philo
+philo_bonus
 
 # Linker output
 *.ilk

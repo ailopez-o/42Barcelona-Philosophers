@@ -63,25 +63,28 @@ void	ft_error(int error, t_table *table)
 	free(table->forks);
 }
 
+/*
+	//printf("%s%u ms ▶ %s", KBLU, real_time(philo->data->start_time), \
+	//	DEF_COLOR);
+	//printf("👤 Philo [%03d] ", philo->num_philo);
+	//printf("%s%s%s\n\n", color, str, DEF_COLOR);
+*/
 
-int	status_print(t_philo *philo, char *str, char *color)
+int	status_print(t_philo *philo, char *str, char *color, int print_death)
 {
-	if (!philo->data->dead)
+
+	if (pthread_mutex_lock(&philo->data->print_mtx))
+		return (MUTEX_ERROR);
+	if (!philo->data->dead || print_death)
 	{
-		if (pthread_mutex_lock(&philo->data->print_mtx))
-			return (MUTEX_ERROR);
 		if (printf("%u ", real_time(philo->data->start_time)) < 0)
 			return (PRINTF_ERROR);
 		if (printf("%d ", philo->num_philo) < 0)
 			return (PRINTF_ERROR);
 		if (printf("%s\n",str) < 0)
 			return (PRINTF_ERROR);
-		//printf("%s%u ms ▶ %s", KBLU, real_time(philo->data->start_time), \
-		//	DEF_COLOR);
-		//printf("👤 Philo [%03d] ", philo->num_philo);
-		//printf("%s%s%s\n\n", color, str, DEF_COLOR);
-		if (pthread_mutex_unlock(&philo->data->print_mtx))
-			return (MUTEX_ERROR);
 	}
+	if (pthread_mutex_unlock(&philo->data->print_mtx))
+		return (MUTEX_ERROR);
 	return (0);
 }

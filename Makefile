@@ -33,13 +33,17 @@ WHITE = \033[0;97m
  
 all:	
 		@$(MAKE) -C $(MANDATORY_DIR)
+		@cp $(MANDATORY_DIR)philo philo
 		@$(MAKE) -C $(BONUS_DIR)
+		@cp $(BONUS_DIR)philo philo_bonus
 
 $(NAME):
 		@$(MAKE) -C $(MANDATORY_DIR)
+		@cp $(MANDATORY_DIR)philo philo
 
 bonus:		
 		@$(MAKE) -C $(BONUS_DIR)
+		@cp $(BONUS_DIR)philo philo_bonus
 		
 
 clean:

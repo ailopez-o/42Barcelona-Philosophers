@@ -18,6 +18,6 @@ unsigned int	real_time(long long time);
 void			philo_sleep(long long time);
 long long		timestamp(void);
 void			ft_error(int error, t_table *table);
-int			    status_print(t_philo *philo, char *str, char *color);
+int             status_print(t_philo *philo, char *str, char *color, int print_death);
 int	            ft_atoi(const char *str);
 #endif
