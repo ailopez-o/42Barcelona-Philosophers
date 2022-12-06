@@ -81,11 +81,7 @@ int	status_print(t_philo *philo, char *str, char *color, int print_death)
 		return (EDEADLK);
 	if (!philo->data->dead || print_death)
 	{
-		if (printf("%s%04u%s ", YELLOW, real_time(philo->data->start_time), DEF_COLOR) < 0)
-			return (EIO);
-		if (printf("%03d ", philo->num_philo) < 0)
-			return (EIO);
-		if (printf("%s%s%s\n", color, str, DEF_COLOR) < 0)
+		if (printf("%s%04u%s  %03d %s%s%s\n", YELLOW, real_time(philo->data->start_time), DEF_COLOR,  philo->num_philo, color, str, DEF_COLOR) < 0)
 			return (EIO);
 	}
 	if (pthread_mutex_unlock(&philo->data->print_mtx))

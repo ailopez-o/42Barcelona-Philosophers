@@ -47,34 +47,40 @@ void	philo_sleep(long long time)
 	}
 }
 
-void	ft_error(int error, t_table *table)
+static int	write_error(char *str)
 {
-	if (error == INVALID_ARGS)
-	{
-		printf("Invalid arguments\n");
-		exit (INVALID_ARGS);
-	}
-	if (error == ENOMEM)
-	{
-		printf("Out of memory\n");
-		exit (ENOMEM);
-	}
-	free(table->philos);
-	free(table->forks);
+	int	len;
+
+	len = 0;
+	while (str[len])
+		len++;
+	return (write(2, str, len));
 }
 
-void	status_print(t_philo *philo, char *str, char *color)
+
+int	ft_error(int error)
 {
-	if (!philo->data->dead)
-	{
-		pthread_mutex_lock(&philo->data->print_mtx);
-		//printf("%u ", real_time(first_timestamp));
-		//printf("%d ", philo_id);
-		//printf("%s\n",str);
-		printf("%s%u ms ▶ %s", KBLU, real_time(philo->data->start_time), \
-			DEF_COLOR);
-		printf("👤 Philo [%03d] ", philo->num_philo);
-		printf("%s%s%s\n\n", color, str, DEF_COLOR);
-		pthread_mutex_unlock(&philo->data->print_mtx);
-	}
+	if (error == EINVAL)
+		write_error("Invalid arguments\n");
+	if (error == ENOMEM)
+		write_error("Out of memory\n");
+	return (error);	
+}
+
+/*
+	//printf("%s%u ms ▶ %s", KBLU, real_time(philo->data->start_time), \
+	//	DEF_COLOR);
+	//printf("👤 Philo [%03d] ", philo->num_philo);
+	//printf("%s%s%s\n\n", color, str, DEF_COLOR);
+*/
+
+int	status_print(t_philo *philo, char *str, char *color, int print_death)
+{
+	if (sem_wait(philo->data->print_sem))
+		return (ECANCELED);
+	if (printf("%s%04u%s  %03d %s%s%s\n", YELLOW, real_time(philo->data->start_time), DEF_COLOR,  philo->num_philo, color, str, DEF_COLOR) < 0)
+		return (EIO);
+	if (sem_post(philo->data->print_sem))
+		return (ECANCELED);	
+	return (0);
 }

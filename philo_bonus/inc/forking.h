@@ -14,9 +14,5 @@
 
 # include "../inc/defines.h"
 
-void	free_mutex(t_table *table);
-void	threads_start(t_table *table);
-void	threads_join(t_table *table);
-void	*monitor(void *table_info);
-void	*philo_thread(void *philosopher);
+int		free_resources(t_table *table);
 #endif

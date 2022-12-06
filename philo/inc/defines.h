@@ -50,7 +50,6 @@ typedef struct s_data{
 typedef struct s_philo {
 	int					num_philo;
 	pthread_t			thread_id;	
-	pthread_mutex_t		mutex_meal;
 	pthread_mutex_t		*mutex_fork_left;
 	pthread_mutex_t		*mutex_fork_right;
 	long long			last_meal;	

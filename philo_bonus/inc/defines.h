@@ -13,21 +13,19 @@
 # define DEFINES_H
 
 # include <stdbool.h>
-# include <pthread.h>
+# include <semaphore.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-
-# define INVALID_ARGS	22
-# define ENOMEM			12
+# include "errors.h"
 
 # define DEF_COLOR	"\033[0;39m"
 # define GRAY		"\033[0;90m"
-# define RED			"\033[0;91m"
+# define RED		"\033[0;91m"
 # define GREEN		"\033[0;92m"
 # define YELLOW		"\033[0;93m"
 # define BLUE		"\033[0;94m"
-# define MAGENTA		"\033[0;95m"
+# define MAGENTA	"\033[0;95m"
 # define CYAN 		"\033[0;96m"
 # define WHITE		"\033[0;97m"
 # define KNRM		"\x1B[0m"
@@ -40,30 +38,28 @@
 # define KWHT		"\x1B[37m"
 
 typedef struct s_data{
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				number_time_eats;
-	long long		start_time;	
-	pthread_mutex_t	print_mtx;
-	char			dead;
+	int			time_to_die;
+	int			time_to_eat;
+	int			time_to_sleep;
+	int			number_time_eats;
+	long long	start_time;	
+	sem_t		*print_sem;
+	char		dead;
 }	t_data;
 
 typedef struct s_philo {
-	int					num_philo;
-	pthread_t			thread_id;	
-	pthread_mutex_t		mutex_meal;
-	pthread_mutex_t		*mutex_fork_left;
-	pthread_mutex_t		*mutex_fork_right;
-	long long			last_meal;	
-	t_data				*data;
-	int					num_eats;
+	int			num_philo;
+	pthread_t	thread_id;
+	long long	last_meal;
+	t_data		*data;
+	int			num_eats;
 }	t_philo;
 
 typedef struct s_table {
 	int				num_philos;
 	t_data			data;
-	pthread_mutex_t	*forks;	
+	sem_t			*sem_fork;
+	pid_t			*pid;
 	t_philo			*philos;
 	pthread_t		monitor;
 }	t_table;
