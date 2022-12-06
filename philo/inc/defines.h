@@ -17,19 +17,15 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-
-# define INVALID_ARGS	22
-# define ENOMEM			12
-# define MUTEX_ERROR	40
-# define PRINTF_ERROR	41
+# include "errors.h"
 
 # define DEF_COLOR	"\033[0;39m"
 # define GRAY		"\033[0;90m"
-# define RED			"\033[0;91m"
+# define RED		"\033[0;91m"
 # define GREEN		"\033[0;92m"
 # define YELLOW		"\033[0;93m"
 # define BLUE		"\033[0;94m"
-# define MAGENTA		"\033[0;95m"
+# define MAGENTA	"\033[0;95m"
 # define CYAN 		"\033[0;96m"
 # define WHITE		"\033[0;97m"
 # define KNRM		"\x1B[0m"

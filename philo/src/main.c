@@ -19,13 +19,13 @@ int	init_mutex(t_table *table)
 
 	table->forks = malloc (sizeof(pthread_mutex_t) * table->num_philos);
 	if (table->forks == NULL)
-		return (ft_error (ENOMEM));
+		return (ENOMEM);
 	pthread_mutex_init(&table->data.print_mtx, NULL);
 	i = -1;
 	while (++i < table->num_philos)
 	{
 		if (pthread_mutex_init(&table->forks[i], NULL))
-			return (ft_error (ENOMEM));
+			return (ECANCELED);
 	}
 	return (0);
 }
@@ -36,7 +36,7 @@ int	init_threads(t_table *table)
 
 	table->philos = malloc (sizeof(t_philo) * table->num_philos);
 	if (table->philos == NULL)
-		return (ft_error (ENOMEM));
+		return (ENOMEM);
 	i = -1;
 	while (++i < table->num_philos)
 	{
@@ -52,16 +52,16 @@ int	init_threads(t_table *table)
 		table->philos[i].data = &table->data;
 	}
 	if (threads_start(table))
-		return (ft_error (ENOMEM));
+		return (ECANCELED);
 	if (pthread_create(&table->monitor, NULL, monitor, table))
-		return (ft_error (ENOMEM));
+		return (ECANCELED);
 	return (0);
 }
 
 int	parsing_args(int argv, char **argc, t_table *table)
 {
 	if (argv < 5)
-		return (ft_error (INVALID_ARGS));
+		return (EINVAL);
 	table->num_philos = ft_atoi(argc[1]);
 	table->data.time_to_die = ft_atoi(argc[2]);
 	table->data.time_to_eat = ft_atoi(argc[3]);
@@ -70,29 +70,37 @@ int	parsing_args(int argv, char **argc, t_table *table)
 	if (argv == 6)
 		table->data.number_time_eats = ft_atoi(argc[5]);
 	if (table->num_philos < 2)
-		return (ft_error (INVALID_ARGS));
+		return (EINVAL);
 	if (table->data.time_to_die < 0 || table->data.time_to_eat < 0 || \
 		table->data.time_to_sleep < 0)
-		return (ft_error (INVALID_ARGS));
+		return (EINVAL);
+	return (0);
+}
+
+int	init_resources (t_table *table)
+{
+	int	error;
+
+	error = init_mutex(table);
+	if (error)
+		return (error);
+	error = init_threads(table);
+	if (error)
+		return (error);
 	return (0);
 }
 
 int	main(int argv, char **argc)
 {
 	t_table			table;
+	int 			error;
 	unsigned long	time;
 
 	if (parsing_args(argv, argc, &table))
-		return (1);
-	if (init_mutex(&table))
-		return (1);
-	if (init_threads(&table))
-		return (1);
-	if (threads_join (&table))
-		return (1);
-	if (free_mutex(&table))
-		return (1);
-	free(table.philos);
-	free(table.forks);
-	return (0);
+		return (ft_error (EINVAL));
+	error = init_resources (&table);
+	if (error)
+		return (ft_error (error));
+	threads_join (&table);
+	return (free_mutex(&table));
 }

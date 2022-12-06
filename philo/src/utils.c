@@ -60,7 +60,7 @@ static int	write_error(char *str)
 
 int	ft_error(int error)
 {
-	if (error == INVALID_ARGS)
+	if (error == EINVAL)
 		write_error("Invalid arguments\n");
 	if (error == ENOMEM)
 		write_error("Out of memory\n");
@@ -78,17 +78,17 @@ int	status_print(t_philo *philo, char *str, char *color, int print_death)
 {
 
 	if (pthread_mutex_lock(&philo->data->print_mtx))
-		return (MUTEX_ERROR);
+		return (EDEADLK);
 	if (!philo->data->dead || print_death)
 	{
 		if (printf("%u ", real_time(philo->data->start_time)) < 0)
-			return (PRINTF_ERROR);
+			return (EIO);
 		if (printf("%d ", philo->num_philo) < 0)
-			return (PRINTF_ERROR);
+			return (EIO);
 		if (printf("%s\n",str) < 0)
-			return (PRINTF_ERROR);
+			return (EIO);
 	}
 	if (pthread_mutex_unlock(&philo->data->print_mtx))
-		return (MUTEX_ERROR);
+		return (EDEADLK);
 	return (0);
 }

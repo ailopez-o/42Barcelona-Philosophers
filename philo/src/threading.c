@@ -57,11 +57,8 @@ void	*monitor(void *table_info)
 			if (time > table->philos[i].data->time_to_die)
 			{
 				table->philos[i].data->dead = 1;
-				if (table->data.number_time_eats == 0)
-				{
-					status_print(&table->philos[i], "died", KRED, 1);
-					return (NULL);
-				}			
+				status_print(&table->philos[i], "died", KRED, 1);
+				return (NULL);			
 			}
 		}
 		usleep(100);
@@ -99,10 +96,14 @@ int	threads_start(t_table *table)
 int	free_mutex(t_table *table)
 {
 	int	i;
+	int	error;
 
+	error = 0;
 	i = -1;
 	while (++i < table->num_philos)
-		pthread_mutex_destroy(&(table->forks[i]));
-	pthread_mutex_destroy(&(table->data.print_mtx));
-	return (0);
+		error += pthread_mutex_destroy(&(table->forks[i]));
+	error += pthread_mutex_destroy(&(table->data.print_mtx));
+	free(table->philos);
+	free(table->forks);	
+	return (error);
 }
