@@ -73,5 +73,8 @@ int	main(int argv, char **argc)
 	error = init_resources (&table);
 	if (error)
 		return (ft_error (error));
+	error = start_routines(&table);
+	if (error)
+		return (ft_error (error));
 	return (free_resources(&table));
 }

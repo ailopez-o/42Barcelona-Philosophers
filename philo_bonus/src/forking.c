@@ -21,10 +21,10 @@ int	philo_routine(t_philo *philo)
 
 		//Pensar
 
-
+	return (0);
 }
 
-int	run_processes(t_table *table)
+int	start_routines(t_table *table)
 {
 	int	i;
 

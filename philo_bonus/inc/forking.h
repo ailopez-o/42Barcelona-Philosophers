@@ -15,4 +15,5 @@
 # include "../inc/defines.h"
 
 int		free_resources(t_table *table);
+int		start_routines(t_table *table);
 #endif
