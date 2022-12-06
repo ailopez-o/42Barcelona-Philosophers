@@ -12,28 +12,26 @@
 	<img src="https://github.com/ailopez-o/42Barcelona-Minitalk/blob/main/img/minitalk.gif?raw=true" />
 </p>
 
-## The Philospher problem
+## The Philosphers problem
 
-One or more philosophers sit at a round table.
-There is a large bowl of spaghetti in the middle of the table.
-The philosophers alternatively eat, think, or sleep. While they are eating, they are not thinking nor sleeping; while thinking, they are not eating nor sleeping; and, of course, while sleeping, they are not eating nor thinking.
-There are also forks on the table. There are as many forks as philosophers.
-Because serving and eating spaghetti with only one fork is very inconvenient, a
-philosopher takes their right and their left forks to eat, one in each hand.
-When a philosopher has finished eating, they put their forks back on the table and start sleeping. Once awake, they start thinking again. The simulation stops when a philosopher dies of starvation.
-Every philosopher needs to eat and should never starve.
-Philosophers don’t speak with each other.
-Philosophers don’t know if another philosopher is about to die.
-No need to say that philosophers should avoid dying!
-
-
+<p>One or more philosophers sit at a round table.</p>
+<p>There is a large bowl of spaghetti in the middle of the table.
+The philosophers alternatively eat, think, or sleep. While they are eating, they are not thinking nor sleeping; while thinking, they are not eating nor sleeping; and, of course, while sleeping, they are not eating nor thinking.</p>
+<p>There are also forks on the table. There are as many forks as philosophers.</p>
+<p>Because serving and eating spaghetti with only one fork is very inconvenient, a
+philosopher takes their right and their left forks to eat, one in each hand.</p>
+<p>When a philosopher has finished eating, they put their forks back on the table and start sleeping. Once awake, they start thinking again. The simulation stops when a philosopher dies of starvation.</p>
+<p>Every philosopher needs to eat and should never starve.</p>
+<p>Philosophers don’t speak with each other.</p>
+<p>Philosophers don’t know if another philosopher is about to die.</p>
+<p>No need to say that philosophers should avoid dying!</p>
 
 
 
 
 
 
+## Resources
 
-
-Vosualizar: https://nafuka11.github.io/philosophers-visualizer/
-Resources: https://www.notion.so/philosophers-VM-c60be9c836084edfbcd9c07e29b429c4
+<p>Visualizer: https://nafuka11.github.io/philosophers-visualizer/</p>
+<p>Resources: https://www.notion.so/philosophers-VM-c60be9c836084edfbcd9c07e29b429c4</p>
