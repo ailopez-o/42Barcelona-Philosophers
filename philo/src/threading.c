@@ -87,7 +87,7 @@ int	threads_start(t_table *table)
 	{
 		if (pthread_create(&table->philos[i].thread_id, \
 			NULL, philo_thread, &table->philos[i]))
-			return (ENOMEM);
+			return (ECANCELED);
 		table->philos[i].last_meal = timestamp();
 	}
 	return (0);

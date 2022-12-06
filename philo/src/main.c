@@ -15,12 +15,13 @@
 
 int	init_mutex(t_table *table)
 {
-	int		i;
+	int	i;
 
 	table->forks = malloc (sizeof(pthread_mutex_t) * table->num_philos);
 	if (table->forks == NULL)
 		return (ENOMEM);
-	pthread_mutex_init(&table->data.print_mtx, NULL);
+	if (pthread_mutex_init(&table->data.print_mtx, NULL))
+		return (ECANCELED);
 	i = -1;
 	while (++i < table->num_philos)
 	{
