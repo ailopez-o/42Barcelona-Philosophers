@@ -9,7 +9,8 @@
 </p>
 
 <p align="center">
-	<img src="https://github.com/ailopez-o/42Barcelona-Philosophers/blob/main/img/philo_img.png?raw=true" />
+	<img src="https://raw.githubusercontent.com/ailopez-o/42Barcelona-Philosophers/main/img/philo_img.jpg" />
+	
 </p>
 
 ## The Philosphers problem
