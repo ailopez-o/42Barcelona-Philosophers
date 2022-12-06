@@ -59,24 +59,6 @@ int	init_threads(t_table *table)
 	return (0);
 }
 
-int	parsing_args(int argv, char **argc, t_table *table)
-{
-	if (argv < 5)
-		return (EINVAL);
-	table->num_philos = ft_atoi(argc[1]);
-	table->data.time_to_die = ft_atoi(argc[2]);
-	table->data.time_to_eat = ft_atoi(argc[3]);
-	table->data.time_to_sleep = ft_atoi(argc[4]);
-	table->data.number_time_eats = 0;
-	if (argv == 6)
-		table->data.number_time_eats = ft_atoi(argc[5]);
-	if (table->num_philos < 2)
-		return (EINVAL);
-	if (table->data.time_to_die < 0 || table->data.time_to_eat < 0 || \
-		table->data.time_to_sleep < 0)
-		return (EINVAL);
-	return (0);
-}
 
 int	init_resources (t_table *table)
 {
