@@ -1,0 +1,9 @@
+[submodule "testers/newlinuxbot"]
+	path = testers/newlinuxbot
+	url = git@github.com:newlinuxbot/Philosphers-42Project-Tester.git
+[submodule "testers/socrates"]
+	path = testers/socrates
+	url = git@github.com:nesvoboda/socrates.git
+[submodule "testers/mfunyu"]
+	path = testers/mfunyu
+	url = git@github.com:mfunyu/tester_philosophers.git
