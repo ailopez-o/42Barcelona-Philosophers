@@ -39,8 +39,8 @@ void	*philo_thread(void *philosopher)
 		if (philo->data->number_time_eats >= 0 && \
 			philo->num_eats >= philo->data->number_time_eats)
 		{
-			philo_dead(philo);
-			break;
+			philo->data->dead = 1;
+			return (NULL);
 		}
 		pthread_mutex_lock(philo->mutex_fork_left);
 		status_print(philo, "has taken a fork", KMAG, 0);
