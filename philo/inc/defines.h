@@ -42,8 +42,9 @@ typedef struct s_data{
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				number_time_eats;
-	long long		start_time;	
+	long long		start_time;
 	pthread_mutex_t	print_mtx;
+	pthread_mutex_t start_mtx;
 	char			dead;
 }	t_data;
 
@@ -60,7 +61,7 @@ typedef struct s_philo {
 typedef struct s_table {
 	int				num_philos;
 	t_data			data;
-	pthread_mutex_t	*forks;	
+	pthread_mutex_t	*forks;
 	t_philo			*philos;
 	pthread_t		monitor;
 }	t_table;

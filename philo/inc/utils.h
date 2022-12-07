@@ -15,7 +15,7 @@
 # include "../inc/defines.h"
 
 unsigned int	real_time(long long time);
-void			philo_sleep(long long time);
+void			philo_sleep(long long time, char *dead);
 long long		timestamp(void);
 int				ft_error(int error);
 int				status_print(t_philo *philo, char *str, char *color, int print_death);

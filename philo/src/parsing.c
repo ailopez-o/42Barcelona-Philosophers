@@ -33,6 +33,8 @@ static int	ft_atoi(const char *str, int *value)
 	if (str[i] == '+' || str[i] == '-')
 		i++;
 	res = 0;
+	if (str[i] == '\0')
+		return (1);
 	while (str[i])
 	{	
 		if (!(str[i] >= '0' && str[i] <= '9'))
@@ -57,13 +59,13 @@ int	parsing_args(int argv, char **argc, t_table *table)
 		ft_atoi(argc[3], &table->data.time_to_eat) || \
 		ft_atoi(argc[4], &table->data.time_to_sleep))
 		return (EINVAL);
-	table->data.number_time_eats = 0;
+	table->data.number_time_eats = -1;
 	if (argv == 6)
 	{
 		if (ft_atoi(argc[5], &table->data.number_time_eats))
 			return (EINVAL);
 	}
-	if (table->num_philos < 2)
+	if (table->num_philos < 1)
 		return (EINVAL);
 	if (table->data.time_to_die < 0 || table->data.time_to_eat < 0 || \
 		table->data.time_to_sleep < 0)

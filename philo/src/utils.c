@@ -34,16 +34,16 @@ unsigned int	real_time(long long time)
 	return ((unsigned int)(now - time));
 }
 
-void	philo_sleep(long long time)
+void	philo_sleep(long long time, char *dead)
 {
 	long long	init_time;
 
 	init_time = timestamp();
-	while (1)
+	while (!*dead)
 	{
 		if ((timestamp() - init_time) >= time)
 			break ;
-		usleep(400);
+		usleep(300);
 	}
 }
 

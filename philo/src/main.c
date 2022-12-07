@@ -22,6 +22,8 @@ int	init_mutex(t_table *table)
 		return (ENOMEM);
 	if (pthread_mutex_init(&table->data.print_mtx, NULL))
 		return (ECANCELED);
+	if (pthread_mutex_init(&table->data.start_mtx, NULL))
+		return (ECANCELED);		
 	i = -1;
 	while (++i < table->num_philos)
 	{
@@ -48,10 +50,14 @@ int	init_threads(t_table *table)
 			&table->forks[table->num_philos - 1];
 		else
 			table->philos[i].mutex_fork_right = &table->forks[i - 1];
+		if (table->num_philos == 1)
+			table->philos[i].mutex_fork_right = NULL;			
 		table->data.dead = 0;
 		table->philos[i].num_eats = 0;
 		table->philos[i].data = &table->data;
+
 	}
+
 	if (threads_start(table))
 		return (ECANCELED);
 	if (pthread_create(&table->monitor, NULL, monitor, table))
