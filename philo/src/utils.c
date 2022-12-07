@@ -43,7 +43,7 @@ void	philo_sleep(long long time)
 	{
 		if ((timestamp() - init_time) >= time)
 			break ;
-		usleep(50);
+		usleep(400);
 	}
 }
 
