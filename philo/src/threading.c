@@ -78,8 +78,6 @@ void	*monitor(void *table_info)
 			if (time > table->philos[i].data->time_to_die)
 			{
 				philo_dead(&table->philos[i]);
-				//table->philos[i].data->dead = 1;
-				//status_print(&table->philos[i], "died", KRED, 1);
 				return (NULL);			
 			}
 		}
