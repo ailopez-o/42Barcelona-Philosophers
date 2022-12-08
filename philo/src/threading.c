@@ -17,7 +17,28 @@ void	philo_dead(t_philo *philo)
 	if (philo->data->dead)
 		return ;
 	philo->data->dead = 1;
-	status_print(philo, "died", KRED, 1);
+	status_print(philo, "died 💀", KRED, 1);
+}
+
+int	philo_eat(t_philo *philo)
+{
+	if (philo->data->number_time_eats >= 0 && \
+		philo->num_eats >= philo->data->number_time_eats)
+	{
+		philo->data->dead = 1;
+		return (1);
+	}
+	pthread_mutex_lock(philo->mutex_fork_left);
+	status_print(philo, "has taken a fork", KMAG, 0);
+	if (philo->mutex_fork_right)
+		pthread_mutex_lock(philo->mutex_fork_right);
+	else
+		return (1);
+	status_print(philo, "has taken a fork", KMAG, 0);
+	status_print(philo, "is eating 🍕", KGRN, 0);
+	philo->num_eats++;
+	philo->last_meal = timestamp();
+	return (0);
 }
 
 void	*philo_thread(void *philosopher)
@@ -36,28 +57,14 @@ void	*philo_thread(void *philosopher)
 	}	
 	while (!philo->data->dead)
 	{
-		if (philo->data->number_time_eats >= 0 && \
-			philo->num_eats >= philo->data->number_time_eats)
-		{
-			philo->data->dead = 1;
+		if (philo_eat(philo))
 			return (NULL);
-		}
-		pthread_mutex_lock(philo->mutex_fork_left);
-		status_print(philo, "has taken a fork", KMAG, 0);
-		if (philo->mutex_fork_right)
-			pthread_mutex_lock(philo->mutex_fork_right);
-		else
-			return (NULL);
-		status_print(philo, "has taken a fork", KMAG, 0);
-		status_print(philo, "is eating", KGRN, 0);
-		philo->num_eats++;
-		philo->last_meal = timestamp();
 		philo_sleep (philo->data->time_to_eat, &philo->data->dead);
 		pthread_mutex_unlock(philo->mutex_fork_left);
 		pthread_mutex_unlock(philo->mutex_fork_right);
-		status_print(philo, "is sleeping", KCYN, 0);
+		status_print(philo, "is sleeping 💤", KCYN, 0);
 		philo_sleep (philo->data->time_to_sleep, &philo->data->dead);
-		status_print(philo, "is thinking", KWHT, 0);
+		status_print(philo, "is thinking 🗯", KWHT, 0);
 	}
 	return (NULL);
 }
@@ -86,17 +93,6 @@ void	*monitor(void *table_info)
 	return (NULL);
 }
 
-int	threads_join(t_table *table)
-{
-	int		i;
-
-	i = -1;
-	while (++i < table->num_philos)
-		pthread_join(table->philos[i].thread_id, NULL);
-	pthread_join(table->monitor, NULL);
-	return (0);
-}
-
 int	threads_start(t_table *table)
 {
 	int	i;
@@ -113,20 +109,4 @@ int	threads_start(t_table *table)
 	table->data.start_time = timestamp();
 	pthread_mutex_unlock(&table->data.start_mtx);
 	return (0);
-}
-
-int	free_mutex(t_table *table)
-{
-	int	i;
-	int	error;
-
-	error = 0;
-	i = -1;
-	while (++i < table->num_philos)
-		error += pthread_mutex_destroy(&(table->forks[i]));
-	error += pthread_mutex_destroy(&(table->data.print_mtx));
-	error += pthread_mutex_destroy(&(table->data.start_mtx));
-	free(table->philos);
-	free(table->forks);
-	return (error);
 }

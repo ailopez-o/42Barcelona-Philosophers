@@ -1,22 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ailopez- <ailopez-@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/08 14:01:38 by ailopez-          #+#    #+#             */
+/*   Updated: 2022/12/08 14:01:41 by ailopez-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../inc/defines.h"
 #include <limits.h>
-
-static int	ft_isvalid(char caracter)
-{
-	if (caracter == '\f')
-		return (1);
-	if (caracter == '\t')
-		return (1);
-	if (caracter == '\n')
-		return (1);
-	if (caracter == '\v')
-		return (1);
-	if (caracter == '\r')
-		return (1);
-	if (caracter == ' ')
-		return (1);
-	return (0);
-}
 
 static int	ft_atoi(const char *str, int *value)
 {
@@ -26,8 +20,6 @@ static int	ft_atoi(const char *str, int *value)
 
 	i = 0;
 	neg = 1;
-	while (ft_isvalid(str[i]))
-		i++;
 	if (str[i] == '-')
 		neg = -1;
 	if (str[i] == '+' || str[i] == '-')

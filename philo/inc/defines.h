@@ -44,7 +44,7 @@ typedef struct s_data{
 	int				number_time_eats;
 	long long		start_time;
 	pthread_mutex_t	print_mtx;
-	pthread_mutex_t start_mtx;
+	pthread_mutex_t	start_mtx;
 	char			dead;
 }	t_data;
 

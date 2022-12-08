@@ -33,6 +33,17 @@ int	init_mutex(t_table *table)
 	return (0);
 }
 
+void	fork_asignament(t_philo *philo, pthread_mutex_t *forks, int num_philos)
+{
+	philo->mutex_fork_left = &forks[philo->num_philo - 1];
+	if (philo->num_philo == 1)
+		philo->mutex_fork_right = &forks[num_philos - 1];
+	else
+		philo->mutex_fork_right = &forks[philo->num_philo - 2];
+	if (num_philos == 1)
+		philo->mutex_fork_right = NULL;
+}
+
 int	init_threads(t_table *table)
 {
 	int	i;
@@ -44,14 +55,7 @@ int	init_threads(t_table *table)
 	while (++i < table->num_philos)
 	{
 		table->philos[i].num_philo = i + 1;
-		table->philos[i].mutex_fork_left = &table->forks[i];
-		if (i == 0)
-			table->philos[i].mutex_fork_right = \
-			&table->forks[table->num_philos - 1];
-		else
-			table->philos[i].mutex_fork_right = &table->forks[i - 1];
-		if (table->num_philos == 1)
-			table->philos[i].mutex_fork_right = NULL;
+		fork_asignament (&table->philos[i], table->forks, table->num_philos);
 		table->data.dead = 0;
 		table->philos[i].num_eats = 0;
 		table->philos[i].data = &table->data;

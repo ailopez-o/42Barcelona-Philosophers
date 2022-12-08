@@ -44,6 +44,7 @@ WHITE = \033[0;97m
 SRC_FILES	=	main \
 				utils \
 				threading \
+				threads_utils \
 				parsing
 
 SRC 		= 	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))

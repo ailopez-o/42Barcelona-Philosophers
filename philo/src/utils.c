@@ -34,19 +34,6 @@ unsigned int	real_time(long long time)
 	return ((unsigned int)(now - time));
 }
 
-void	philo_sleep(long long time, char *dead)
-{
-	long long	init_time;
-
-	init_time = timestamp();
-	while (!*dead)
-	{
-		if ((timestamp() - init_time) >= time)
-			break ;
-		usleep(300);
-	}
-}
-
 static int	write_error(char *str)
 {
 	int	len;
@@ -64,27 +51,4 @@ int	ft_error(int error)
 	if (error == ENOMEM)
 		write_error("Out of memory\n");
 	return (error);
-}
-
-/*
-	//printf("%s%u ms ▶ %s", KBLU, real_time(philo->data->start_time), \
-	//	DEF_COLOR);
-	//printf("👤 Philo [%03d] ", philo->num_philo);
-	//printf("%s%s%s\n\n", color, str, DEF_COLOR);
-*/
-
-int	status_print(t_philo *philo, char *str, char *color, int print_death)
-{
-	if (pthread_mutex_lock(&philo->data->print_mtx))
-		return (EDEADLK);
-	if (!philo->data->dead || print_death)
-	{
-		if (printf("%s%04u%s  %03d %s%s%s\n", YELLOW, \
-			real_time(philo->data->start_time), DEF_COLOR, \
-			philo->num_philo, color, str, DEF_COLOR) < 0)
-			return (EIO);
-	}
-	if (pthread_mutex_unlock(&philo->data->print_mtx))
-		return (EDEADLK);
-	return (0);
 }
