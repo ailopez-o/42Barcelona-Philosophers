@@ -39,13 +39,6 @@ int	threads_join(t_table *table)
 	return (0);
 }
 
-/*
-	//printf("%s%u ms ▶ %s", KBLU, real_time(philo->data->start_time), \
-	//	DEF_COLOR);
-	//printf("👤 Philo [%03d] ", philo->num_philo);
-	//printf("%s%s%s\n\n", color, str, DEF_COLOR);
-*/
-
 int	status_print(t_philo *philo, char *str, char *color, int print_death)
 {
 	if (pthread_mutex_lock(&philo->data->print_mtx))
@@ -55,13 +48,7 @@ int	status_print(t_philo *philo, char *str, char *color, int print_death)
 		if (printf("%s%04u ms ▶ %s 👤 Philo [%03d] %s%s%s\n", KBLU, \
 			real_time(philo->data->start_time), DEF_COLOR, \
 			philo->num_philo, color, str, DEF_COLOR) < 0)
-			return (EIO);	
-		/*
-		if (printf("%s%04u%s  %03d %s%s%s\n", YELLOW, \
-			real_time(philo->data->start_time), DEF_COLOR, \
-			philo->num_philo, color, str, DEF_COLOR) < 0)
 			return (EIO);
-		*/
 	}
 	if (pthread_mutex_unlock(&philo->data->print_mtx))
 		return (EDEADLK);

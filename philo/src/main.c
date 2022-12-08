@@ -84,7 +84,6 @@ int	main(int argv, char **argc)
 {
 	t_table			table;
 	int				error;
-	unsigned long	time;
 
 	if (parsing_args(argv, argc, &table))
 		return (ft_error (EINVAL));

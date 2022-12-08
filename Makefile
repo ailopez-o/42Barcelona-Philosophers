@@ -54,9 +54,7 @@ DARK_YELLOW =	\033[38;5;143m
  
 all:	
 		@$(MAKE) -C $(MANDATORY_DIR)
-		@cp $(MANDATORY_DIR)philo _philo
 		@$(MAKE) -C $(BONUS_DIR)
-		@cp $(BONUS_DIR)philo_bonus _philo_bonus
 
 # Action to update the git submodules
 update:
@@ -66,13 +64,10 @@ update:
 
 $(NAME):
 		@$(MAKE) -C $(MANDATORY_DIR)
-		@cp $(MANDATORY_DIR)philo _philo
 
 bonus:		
 		@$(MAKE) -C $(BONUS_DIR)
-		@cp $(BONUS_DIR)philo_bonus _philo_bonus
 		
-
 clean:
 			@make clean -sC $(MANDATORY_DIR)
 			@make clean -sC $(BONUS_DIR)

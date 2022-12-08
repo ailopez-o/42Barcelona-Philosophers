@@ -23,8 +23,8 @@ void	*philo_death_supervisor(void *params)
 		time = real_time(philo->last_meal);
 		if (time > philo->data->time_to_die)
 		{
-			status_print(philo, "died", KRED, 1);
 			philo->data->dead = 1;
+			status_print(philo, "died 💀", KRED, 1);
 			exit (1);
 		}
 		usleep(500);
@@ -38,7 +38,7 @@ void	philo_eats(t_philo *philo)
 	status_print(philo, "has taken a fork", KMAG, 0);
 	sem_wait(philo->data->sem_fork);
 	status_print(philo, "has taken a fork", KMAG, 0);
-	status_print(philo, "is eating", KGRN, 0);
+	status_print(philo, "is eating 🍕", KGRN, 0);
 	philo->last_meal = timestamp();
 	philo_sleep(philo->data->time_to_eat);
 	philo->num_eats++;
@@ -58,9 +58,9 @@ int	philo_routine(t_philo *philo)
 		if (philo->data->number_time_eats >= 0 && \
 			philo->num_eats >= philo->data->number_time_eats)
 			exit (0);
-		status_print(philo, "is sleeping", KCYN, 0);
+		status_print(philo, "is sleeping 💤", KCYN, 0);
 		philo_sleep(philo->data->time_to_sleep);
-		status_print(philo, "is thinking", KWHT, 0);
+		status_print(philo, "is thinking 🗯", KWHT, 0);
 	}
 	pthread_join(id_supervisor, NULL);
 	exit (0);

@@ -47,22 +47,15 @@ void	philo_sleep(long long time)
 	}
 }
 
-/*
-	//printf("%s%u ms ▶ %s", KBLU, real_time(philo->data->start_time), \
-	//	DEF_COLOR);
-	//printf("👤 Philo [%03d] ", philo->num_philo);
-	//printf("%s%s%s\n\n", color, str, DEF_COLOR);
-*/
-
-int	status_print(t_philo *philo, char *str, char *color, int print_death)
+int	status_print(t_philo *philo, char *str, char *color, int lock)
 {
 	if (sem_wait(philo->data->sem_print))
 		return (ECANCELED);
-	if (printf("%s%04u%s %03d %s%s%s\n", YELLOW, \
-		real_time(philo->data->start_time), DEF_COLOR, \
-		philo->num_philo, color, str, DEF_COLOR) < 0)
+	if (printf("%s%04u ms ▶ %s 👤 Philo [%03d] %s%s%s\n", KBLU, \
+			real_time(philo->data->start_time), DEF_COLOR, \
+			philo->num_philo, color, str, DEF_COLOR) < 0)
 		return (EIO);
-	if (print_death)
+	if (lock == 1)
 		return (0);
 	if (sem_post(philo->data->sem_print))
 		return (ECANCELED);
