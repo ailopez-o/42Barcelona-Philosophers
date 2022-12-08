@@ -43,28 +43,8 @@ void	philo_sleep(long long time)
 	{
 		if ((timestamp() - init_time) >= time)
 			break ;
-		usleep(50);
+		usleep(600);
 	}
-}
-
-static int	write_error(char *str)
-{
-	int	len;
-
-	len = 0;
-	while (str[len])
-		len++;
-	return (write(2, str, len));
-}
-
-
-int	ft_error(int error)
-{
-	if (error == EINVAL)
-		write_error("Invalid arguments\n");
-	if (error == ENOMEM)
-		write_error("Out of memory\n");
-	return (error);	
 }
 
 /*
@@ -76,11 +56,15 @@ int	ft_error(int error)
 
 int	status_print(t_philo *philo, char *str, char *color, int print_death)
 {
-	if (sem_wait(philo->data->print_sem))
+	if (sem_wait(philo->data->sem_print))
 		return (ECANCELED);
-	if (printf("%s%04u%s  %03d %s%s%s\n", YELLOW, real_time(philo->data->start_time), DEF_COLOR,  philo->num_philo, color, str, DEF_COLOR) < 0)
+	if (printf("%s%04u%s %03d %s%s%s\n", YELLOW, \
+		real_time(philo->data->start_time), DEF_COLOR, \
+		philo->num_philo, color, str, DEF_COLOR) < 0)
 		return (EIO);
-	if (sem_post(philo->data->print_sem))
-		return (ECANCELED);	
+	if (print_death)
+		return (0);
+	if (sem_post(philo->data->sem_print))
+		return (ECANCELED);
 	return (0);
 }

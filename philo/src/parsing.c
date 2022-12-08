@@ -48,8 +48,6 @@ static int	ft_atoi(const char *str, int *value)
 	return (0);
 }
 
-
-
 int	parsing_args(int argv, char **argc, t_table *table)
 {
 	if (argv < 5)

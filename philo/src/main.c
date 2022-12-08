@@ -23,7 +23,7 @@ int	init_mutex(t_table *table)
 	if (pthread_mutex_init(&table->data.print_mtx, NULL))
 		return (ECANCELED);
 	if (pthread_mutex_init(&table->data.start_mtx, NULL))
-		return (ECANCELED);		
+		return (ECANCELED);
 	i = -1;
 	while (++i < table->num_philos)
 	{
@@ -35,7 +35,7 @@ int	init_mutex(t_table *table)
 
 int	init_threads(t_table *table)
 {
-	int		i;
+	int	i;
 
 	table->philos = malloc (sizeof(t_philo) * table->num_philos);
 	if (table->philos == NULL)
@@ -51,13 +51,11 @@ int	init_threads(t_table *table)
 		else
 			table->philos[i].mutex_fork_right = &table->forks[i - 1];
 		if (table->num_philos == 1)
-			table->philos[i].mutex_fork_right = NULL;			
+			table->philos[i].mutex_fork_right = NULL;
 		table->data.dead = 0;
 		table->philos[i].num_eats = 0;
 		table->philos[i].data = &table->data;
-
 	}
-
 	if (threads_start(table))
 		return (ECANCELED);
 	if (pthread_create(&table->monitor, NULL, monitor, table))
@@ -65,8 +63,7 @@ int	init_threads(t_table *table)
 	return (0);
 }
 
-
-int	init_resources (t_table *table)
+int	init_resources(t_table *table)
 {
 	int	error;
 
@@ -82,7 +79,7 @@ int	init_resources (t_table *table)
 int	main(int argv, char **argc)
 {
 	t_table			table;
-	int 			error;
+	int				error;
 	unsigned long	time;
 
 	if (parsing_args(argv, argc, &table))

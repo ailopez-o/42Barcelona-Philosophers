@@ -16,7 +16,7 @@ void	philo_dead(t_philo *philo)
 {		
 	if (philo->data->dead)
 		return ;
-	philo->data->dead = 1;	
+	philo->data->dead = 1;
 	status_print(philo, "died", KRED, 1);
 }
 
@@ -26,7 +26,7 @@ void	*philo_thread(void *philosopher)
 
 	philo = (t_philo *)philosopher;
 	if (!(philo->num_philo % 2))
-		usleep(15000);	
+		usleep(15000);
 	pthread_mutex_lock(&philo->data->start_mtx);
 	pthread_mutex_unlock(&philo->data->start_mtx);
 	if (philo->data->time_to_die == 0)
@@ -78,7 +78,7 @@ void	*monitor(void *table_info)
 			if (time > table->philos[i].data->time_to_die)
 			{
 				philo_dead(&table->philos[i]);
-				return (NULL);			
+				return (NULL);
 			}
 		}
 		usleep(100);
@@ -99,20 +99,19 @@ int	threads_join(t_table *table)
 
 int	threads_start(t_table *table)
 {
-	int		i;
+	int	i;
 
 	i = -1;
-	pthread_mutex_lock(&table->data.start_mtx);	
+	pthread_mutex_lock(&table->data.start_mtx);
 	while (++i < table->num_philos)
 	{
-		
 		if (pthread_create(&table->philos[i].thread_id, \
 			NULL, philo_thread, &table->philos[i]))
 			return (ECANCELED);
 		table->philos[i].last_meal = timestamp();
 	}
 	table->data.start_time = timestamp();
-	pthread_mutex_unlock(&table->data.start_mtx);	
+	pthread_mutex_unlock(&table->data.start_mtx);
 	return (0);
 }
 
@@ -126,8 +125,8 @@ int	free_mutex(t_table *table)
 	while (++i < table->num_philos)
 		error += pthread_mutex_destroy(&(table->forks[i]));
 	error += pthread_mutex_destroy(&(table->data.print_mtx));
-	error += pthread_mutex_destroy(&(table->data.start_mtx));	
+	error += pthread_mutex_destroy(&(table->data.start_mtx));
 	free(table->philos);
-	free(table->forks);	
+	free(table->forks);
 	return (error);
 }

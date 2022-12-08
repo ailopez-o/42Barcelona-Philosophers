@@ -17,8 +17,8 @@ NAME		:= philo_bonus
 SRC_DIR		:= src/
 OBJ_DIR		:= obj/
 CC			:= gcc
-#CFLAGS		:= -g -Wall -Werror -Wextra
-CFLAGS		:= -g -Werror
+CFLAGS		:= -g -Wall -Werror -Wextra
+#CFLAGS		:= -g -Werror
 #FSANITIZE	:= -fsanitize=thread
 FSANITIZE	:= 
 NOFLAGS		:= -g

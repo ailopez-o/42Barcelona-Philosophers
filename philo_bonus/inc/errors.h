@@ -1,6 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   errors.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ailopez- <ailopez-@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/08 03:20:52 by ailopez-          #+#    #+#             */
+/*   Updated: 2022/12/08 03:20:55 by ailopez-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #ifndef ERRORS_H
 # define ERRORS_H
-
 
 # define EPERM		1
 # define ENOENT		2
@@ -12,7 +22,6 @@
 # define EINVAL		22
 # define EDEADLK	35
 # define ECANCELED	125
-
 
 /*
 1	EPERM			Operation not permitted

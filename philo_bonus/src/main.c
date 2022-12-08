@@ -16,16 +16,14 @@
 
 int	init_semaphores(t_table *table)
 {
-	int	i;
-
 	sem_unlink("sem_print");
 	sem_unlink("sem_fork");
-	table->data.print_sem = sem_open("sem_print", O_CREAT | O_EXCL, 0644, 1);
-	if (table->data.print_sem == NULL)
+	table->data.sem_print = sem_open("sem_print", O_CREAT | O_EXCL, 0644, 1);
+	if (table->data.sem_print == NULL)
 		return (ECANCELED);
-	i = -1;
-	table->sem_fork = sem_open("sem_fork", O_CREAT | O_EXCL, 0644, table->num_philos);
-	if (table->sem_fork == NULL)
+	table->data.sem_fork = sem_open("sem_fork", \
+		O_CREAT | O_EXCL, 0644, table->num_philos);
+	if (table->data.sem_fork == NULL)
 		return (ECANCELED);
 	return (0);
 }
@@ -48,8 +46,15 @@ int	init_philos(t_table *table)
 	return (0);
 }
 
+int	free_resources(t_table *table)
+{
+	sem_close(table->data.sem_fork);
+	sem_close(table->data.sem_print);
+	free(table->philos);
+	return (0);
+}
 
-int	init_resources (t_table *table)
+int	init_resources(t_table *table)
 {
 	int	error;
 
@@ -64,9 +69,8 @@ int	init_resources (t_table *table)
 
 int	main(int argv, char **argc)
 {
-	t_table			table;
-	int 			error;
-	unsigned long	time;
+	t_table	table;
+	int		error;
 
 	if (parsing_args(argv, argc, &table))
 		return (ft_error (EINVAL));

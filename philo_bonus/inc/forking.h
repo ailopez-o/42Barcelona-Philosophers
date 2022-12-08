@@ -9,8 +9,8 @@
 /*   Updated: 2022/11/28 09:37:11 by ailopez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef THREADING_H
-# define THREADING_H
+#ifndef FORKING_H
+# define FORKING_H
 
 # include "../inc/defines.h"
 

@@ -13,8 +13,10 @@
 # define DEFINES_H
 
 # include <stdbool.h>
+# include <pthread.h>
 # include <semaphore.h>
 # include <stdio.h>
+# include <signal.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include "errors.h"
@@ -43,7 +45,8 @@ typedef struct s_data{
 	int			time_to_sleep;
 	int			number_time_eats;
 	long long	start_time;	
-	sem_t		*print_sem;
+	sem_t		*sem_print;
+	sem_t		*sem_fork;	
 	char		dead;
 }	t_data;
 
@@ -53,13 +56,12 @@ typedef struct s_philo {
 	long long	last_meal;
 	t_data		*data;
 	int			num_eats;
+	pid_t		pid;
 }	t_philo;
 
 typedef struct s_table {
 	int				num_philos;
 	t_data			data;
-	sem_t			*sem_fork;
-	pid_t			*pid;
 	t_philo			*philos;
 	pthread_t		monitor;
 }	t_table;
