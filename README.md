@@ -10,7 +10,6 @@
 
 <p align="center">
 	<img src="https://raw.githubusercontent.com/ailopez-o/42Barcelona-Philosophers/main/img/philo_img.jpg" />
-	
 </p>
 
 ## The Philosphers problem
@@ -28,7 +27,9 @@ philosopher takes their right and their left forks to eat, one in each hand.</p>
 <p>No need to say that philosophers should avoid dying!</p>
 
 
-
+<p align="center">
+	<img src="https://github.com/ailopez-o/42Barcelona-Philosophers/blob/main/img/program.png?raw=true" />
+</p>
 
 
 
